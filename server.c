@@ -26,9 +26,6 @@ void echo(int connfd)
     }
 }
 */
-char * serialize_char(char *buf, char val);
-char * serialize_card(char *buf, struct card *val);
-char * serialize_hand(char *buf, struct hand *val);
  
 int main(int argc, char **argv) 
 {
@@ -72,9 +69,8 @@ int main(int argc, char **argv)
     while(win == 0){
 ////////////////////Player 1's Turn///////////////////////////////////
       while((turn==1) && (win == 0)){
-	//need to figure out how large a hand is to tell how many bytes to send
-        //send(connfdp, serialize_hand(buf, user->card_list, _______, 0);
-
+	buf = display_hand(&user);
+	rio_writen(connfdp, buf, strlen(buf)); 	 //sending hand string to client
 	display_book(&user,1);                        //Display player 1's book 
         display_book(&computer,2);                    //Display user 1's book
         if(user.hand_size == 0){                      //If player's hand is empty, player will draw a card and end their turn
@@ -88,7 +84,7 @@ int main(int argc, char **argv)
 //////////////////////HANDLE CLIENT TO SERVER INTERACTION HERE///////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 	else{
-	  if((inputRank = recv(connfdp, buf, 1, 0)) < 0){ //receive a message of 1 char
+	  if((inputRank = rio_readn(connfdp, buf, 1)) < 0){ //receive a message of 1 char
 	    printf("\nERROR RECEIVING FROM CLIENT");
 	  } 
           temp = copy_hand_list(&user);
@@ -233,22 +229,4 @@ void *thread(void *vargp)
     return NULL;
 }
 /* $end echoservertmain */
-
-char * serialize_char(char *buf, char val){
-  buf[0] = val;
-  return buf+sizeof(char);
-}
-
-char * serialize_card(char *buf, struct card *val){
-//not sure if these indices have correct spacing
-  buf[0] = serialize_char(buf, val->suit);
-  buf[1] = serialize_char(buf, val->rank);
-  return buf+sizeof(struct card);
-}
-
-char * serialize_hand(char *buf, struct hand *val){
-  buf[0] = serialize_card(buf, val->top);
-  buf[1] = //help
-  return buf+sizeof(struct hand);
-}
  
