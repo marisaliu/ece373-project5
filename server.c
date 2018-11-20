@@ -26,10 +26,15 @@ void echo(int connfd)
     }
 }
 */
+
+char * serialize_char(char* buf, char in);
+char * serialize_card(char* buf, struct card in);
+char * serialize_hand(char* buf, struct hand in);
  
 int main(int argc, char **argv) 
 {
-    char listenfd, *connfdp, buf[MAXLINE];
+    int listenfd, *connfdp;
+    char *buf[MAXLINE];
     socklen_t clientlen;
     struct sockaddr_storage clientaddr;
     pthread_t tid; 
@@ -230,3 +235,17 @@ void *thread(void *vargp)
 }
 /* $end echoservertmain */
  
+char * serialize_char(char* buf, char in){
+  buf[0] = in;
+  return buf+sizeof(char);
+}
+char * serialize_card(char* buf, struct card in){
+  buf[0] = in->suit;
+  buf[1] = in->rank;
+  return buf+sizeof(struct card);
+}
+char * serialize_hand(char* buf, struct hand in){
+  buf[0] = in->top;
+  buf[1] = in->next;
+  return buf+sizeof(struct hand);
+}
