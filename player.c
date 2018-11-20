@@ -226,13 +226,16 @@ char user_play(struct player* target)
 //////////////////Displays cards in hand////////////////////////////
 ///////////////////Returns nothing//////////////////////////////////
 ////////////////////////////////////////////////////////////////////
-void display_hand(struct player* target){
-  printf("\n\nPlayer 1's Hand -");
+char* display_hand(struct player* target){
+  char* str = "\n\nPlayer 1's Hand -";
   struct hand* temp = target->card_list;
   while(temp != NULL){
-    printf(" %c%c", temp->top.rank, temp->top.suit);
+		str = strcat(str,temp->top.rank);
+		str = strcat(str,temp->top.suit);
+//   printf(" %c%c", temp->top.rank, temp->top.suit);
     temp = temp->next; 
  }
+return str;
 }
 
 void display_book(struct player* target, int id){
