@@ -26,11 +26,11 @@ void echo(int connfd)
     }
 }
 */
-
+/*
 char * serialize_char(char* buf, char in);
 char * serialize_card(char* buf, struct card in);
 char * serialize_hand(char* buf, struct hand in);
- 
+*/
 int main(int argc, char **argv) 
 {
     int listenfd, *connfdp;
@@ -234,7 +234,7 @@ void *thread(void *vargp)
     return NULL;
 }
 /* $end echoservertmain */
- 
+/* 
 char * serialize_char(char* buf, char in){
   buf[0] = in;
   return buf+sizeof(char);
@@ -248,4 +248,4 @@ char * serialize_hand(char* buf, struct hand in){
   buf[0] = serialize_card(in->top);
   buf[1] = in->next;  //serialize a pointer?
   return buf+sizeof(struct hand);
-}
+}*/
