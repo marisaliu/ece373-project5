@@ -240,12 +240,12 @@ char * serialize_char(char* buf, char in){
   return buf+sizeof(char);
 }
 char * serialize_card(char* buf, struct card in){
-  buf[0] = in->suit;
-  buf[1] = in->rank;
+  buf[0] = serialize_char(in->suit);
+  buf[1] = serialize_char(in->rank);
   return buf+sizeof(struct card);
 }
 char * serialize_hand(char* buf, struct hand in){
-  buf[0] = in->top;
-  buf[1] = in->next;
+  buf[0] = serialize_card(in->top);
+  buf[1] = in->next;  //serialize a pointer?
   return buf+sizeof(struct hand);
 }
