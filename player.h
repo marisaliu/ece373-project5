@@ -148,7 +148,7 @@ char user_play(struct player* target);
  * ----------------------
  * Print out contents of target's hand
  */
-void display_hand(struct player* target);
+char * display_hand(struct player* target);
 
 /*
  * Function: display_book
