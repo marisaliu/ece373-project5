@@ -37,7 +37,7 @@ int main(int argc, char **argv)
     char *buf[MAXLINE];
     socklen_t clientlen;
     struct sockaddr_storage clientaddr;
-    pthread_t tid; 
+//    pthread_t tid; 
     char bookAdded;
     char inputRank;
     int transferCards;
@@ -76,13 +76,13 @@ int main(int argc, char **argv)
       while((turn==1) && (win == 0)){
 
 //write hand's ranks into string to send to client
-	struct hand* temp = user->card_list;
+	temp = user.card_list;
 	while(temp != NULL){
-	  buf = strcat(buf,temp->top.rank);
-	  buf = strcat(buf, " ");
+	  buf[0] = strncat(buf[0],temp->top.rank,1);
+	  buf[0] = strncat(buf[0], " ",1);
 	  temp = temp->next;
 	}
-	rio_writen(connfdp, buf, strlen(buf)); 	 //sending hand string to client
+	rio_writen(connfdp, buf, strlen(buf[0])); 	 //sending hand string to client
 
 	display_book(&user,1);                        //Display player 1's book 
         display_book(&computer,2);                    //Display user 1's book
@@ -232,7 +232,7 @@ int main(int argc, char **argv)
 }
 
 /* Thread routine */
-void *thread(void *vargp) 
+/*void *thread(void *vargp) 
 {  
     char connfd = *((char *)vargp);
     Pthread_detach(pthread_self()); //line:conc:echoservert:detach
@@ -240,7 +240,7 @@ void *thread(void *vargp)
     inputRank = connfd;
     Close(connfd);
     return NULL;
-}
+}*/
 /* $end echoservertmain */
 /* 
 char * serialize_char(char* buf, char in){
