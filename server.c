@@ -74,8 +74,16 @@ int main(int argc, char **argv)
     while(win == 0){
 ////////////////////Player 1's Turn///////////////////////////////////
       while((turn==1) && (win == 0)){
-	buf = display_hand(&user);
+
+//write hand's ranks into string to send to client
+	struct hand* temp = user->card_list;
+	while(temp != NULL){
+	  buf = strcat(buf,temp->top.rank);
+	  buf = strcat(buf, " ");
+	  temp = temp->next;
+	}
 	rio_writen(connfdp, buf, strlen(buf)); 	 //sending hand string to client
+
 	display_book(&user,1);                        //Display player 1's book 
         display_book(&computer,2);                    //Display user 1's book
         if(user.hand_size == 0){                      //If player's hand is empty, player will draw a card and end their turn
