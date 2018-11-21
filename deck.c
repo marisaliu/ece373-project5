@@ -1,7 +1,7 @@
 #include "deck.h"
 #include <stdio.h>
 #define TOTALDECK 52
-
+#include <time.h>
 struct deck deck_instance;
 
 int shuffle() {

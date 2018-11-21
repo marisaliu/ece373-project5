@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include "player.h"
-
+#include <time.h>
 ////////////////////////////////////////////////////////////////
 //////////Adds a new card to the player's hand /////////////////
 ////////Returns 0 if no error, returns -1 if error//////////////
