@@ -142,7 +142,7 @@ char computer_play(struct player* target);
  * 
  *   returns: return a valid selected rank
  */
-char user_play(struct player* target);
+//char user_play(struct player* target);
 /*
  * Function: display_hand
  * ----------------------

@@ -62,7 +62,7 @@ int main(int argc, char **argv)
     clientfd = Open_clientfd(host, port);
     Rio_readinitb(&rio, clientfd);
 		char inputRank;
-		Rio_readline(&rio,buf,MAXLINE);
+		Rio_readlineb(&rio,buf,MAXLINE);
 		Fputs(buf,stdout);
 		//while play is true prompt the user for a rank and then display his hand and the books
     while (play) {
