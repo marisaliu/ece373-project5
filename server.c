@@ -34,7 +34,7 @@ char * serialize_hand(char* buf, struct hand in);
 int main(int argc, char **argv) 
 {
     int listenfd, *connfdp;
-    char *buf[MAXLINE];
+    char buf[MAXLINE];
     socklen_t clientlen;
     struct sockaddr_storage clientaddr;
 //    pthread_t tid; 
@@ -77,12 +77,15 @@ int main(int argc, char **argv)
 
 //write hand's ranks into string to send to client
 	temp = user.card_list;
+	int index = 0;
 	while(temp != NULL){
-	  buf[0] = strncat(buf[0],temp->top.rank,1);
-	  buf[0] = strncat(buf[0], " ",1);
+	  buf[index++] = temp->top.rank;
+	  buf[index++] =  " ";
+	 // buf += sizeof(char);
 	  temp = temp->next;
 	}
-	rio_writen(connfdp, buf, strlen(buf[0])); 	 //sending hand string to client
+//	buf = bufHead;
+	rio_writen(connfdp, buf, 100); 	 //sending hand string to client
 
 	display_book(&user,1);                        //Display player 1's book 
         display_book(&computer,2);                    //Display user 1's book
@@ -242,12 +245,12 @@ int main(int argc, char **argv)
     return NULL;
 }*/
 /* $end echoservertmain */
-/* 
+ 
 char * serialize_char(char* buf, char in){
   buf[0] = in;
   return buf+sizeof(char);
 }
-char * serialize_card(char* buf, struct card in){
+/*char * serialize_card(char* buf, struct card in){
   buf[0] = serialize_char(in->suit);
   buf[1] = serialize_char(in->rank);
   return buf+sizeof(struct card);
