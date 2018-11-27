@@ -34,7 +34,7 @@ void gofish(int connfd)
         printf("server received %d bytes\n", n);
         Rio_writen(connfd, inputRank, n);
     }
-*//*
+*/
 if(initTurn==1){
 		initTurn=0;
 		strcat(buf, display_hand(&user));                          //Display player 1's hand
@@ -46,7 +46,7 @@ if(initTurn==1){
 		rio_writen(connfd, buf, strlen(buf)+1);
 		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
 		while((Rio_readlineb(&rio, NULL, 1)) != 0);
-}*/	
+}	
 /////////////////////Player 1's Turn///////////////////////////////////
   strcat(buf, display_hand(&user));                          //Display player 1's hand
 rio_writen(connfd, buf, strlen(buf)+1);
@@ -251,11 +251,10 @@ memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
   }
 
 
-
 int main(int argc, char **argv) 
 {
-		int listenfd, *connfdp;
-  	socklen_t clientlen;
+    int listenfd, *connfdp;
+    socklen_t clientlen;
     struct sockaddr_storage clientaddr;
     pthread_t tid; 
 
@@ -267,22 +266,21 @@ int main(int argc, char **argv)
 //////////////////////Starts the game/////////////////////////
    user.book[0] = '\0'; 
   computer.book[0] = '\0';
-
+	
 while(play==1){                              //start game
-    initTurn=1;
-		playAgain = 0;
+    playAgain = 0;
     if(shuffle() != 0) return -1;                                  //shuffle cards
     if(deal_player_cards(&user) != 0) return -1;   //deal cards
     if(deal_player_cards(&computer) != 0) return -1;
     user.hand_size = 7;
     computer.hand_size = 7;
-	///////////////////////Loops Through Players////////////////////////////////   
+///////////////////////Loops Through Players////////////////////////////////   
     while(win == 0){
     while (1) {
-			clientlen=sizeof(struct sockaddr_storage);
-			connfdp = Malloc(sizeof(int)); //line:conc:echoservert:beginmalloc
-			*connfdp = Accept(listenfd, (SA *) &clientaddr, &clientlen); //line:conc:echoservert:endmalloc
-			Pthread_create(&tid, NULL, thread, connfdp);
+        clientlen=sizeof(struct sockaddr_storage);
+	connfdp = Malloc(sizeof(int)); //line:conc:echoservert:beginmalloc
+	*connfdp = Accept(listenfd, (SA *) &clientaddr, &clientlen); //line:conc:echoservert:endmalloc
+	Pthread_create(&tid, NULL, thread, connfdp);
     }
   }
 }
