@@ -21,7 +21,7 @@ char user_play(char* str)
 	int boolInHand = 0;
 	char rank[(strlen(str)/2)+1];
 	int x = 0;
-	for(int i =0; i < ((strlen(str)/2)+1); i++){
+	for(int i =17; i < strlen(str); i++){
 		if(!isspace(str[i])){
 			rank[x] = str[i];
 			x++;
@@ -47,6 +47,7 @@ char user_play(char* str)
 
 int main(int argc, char **argv) 
 {
+int index = 1;
     int clientfd;
     char *host, *port, buf[MAXLINE],buf2[MAXLINE];
     rio_t rio;
@@ -62,25 +63,29 @@ int main(int argc, char **argv)
     clientfd = Open_clientfd(host, port);
     Rio_readinitb(&rio, clientfd);
 		char inputRank;
-		while(Rio_readlineb(&rio,buf,MAXLINE) != 0);
-		Fputs(buf,stdout);
-	//	Rio_writen(clientfd, buf, strlen(buf)); //writes/sends it to server
-		while(Rio_readlineb(&rio,buf2,MAXLINE) != 0);
-		printf("\n");
-		Fputs(buf2,stdout);
-//	  Rio_writen(clientfd, buf,strlen(buf));
-	//while play is true prompt the user for a rank and then display his hand and the books
+//while play is true prompt the user for a rank and then display his hand and the books
     while (play) 
 		{
-			inputRank = user_play(&buf);
-			strcat(buf,inputRank);
-			Rio_writen(clientfd, buf, strlen(buf)); //writes/sends it to server
-			while(Rio_readlineb(&rio, buf2, MAXLINE) != 0);  //reads in from server
-			Fputs(buf, stdout);
-			printf("\n");
-		 Rio_writen(clientfd,buf,strlen(buf));
-		while(Rio_readlineb(&rio, buf, MAXLINE) != 0);
-			Fputs(buf, stdout);
+	    if(index%3 == 1){
+				buf[0] = '1';
+				Rio_writen(clientfd, buf, strlen(buf)); //writes/sends it to server
+			  while(Rio_readlineb(&rio,buf,MAXLINE) != 0);
+				printf("print out hand");
+				Fputs(buf,stdout);
+			}
+			else if(index%3 == 2){
+			 	Rio_writen(clientfd, buf2, strlen(buf)); //writes/sends it to server
+				while(Rio_readlineb(&rio,buf2,MAXLINE) != 0);
+	     	Fputs(buf2,stdout);
+     		  }
+		  else{	
+				inputRank = user_play(&buf);
+				buf[0] = inputRank;
+				Rio_writen(clientfd, buf, strlen(buf)); //writes/sends it to server
+				while(Rio_readlineb(&rio, buf, MAXLINE) != 0);  //reads in from server
+				Fputs(buf, stdout);
+			}
+			index++;
     }
     Close(clientfd); //line:netp:echoclient:close
     exit(0);
