@@ -24,7 +24,6 @@ char user_play(char* str)
 	for(int i =17; i < strlen(str); i++){
 		if(!isspace(str[i])){
 			rank[x] = str[i];
-			printf("%c\n", rank[x]);
 			x++;
 		}
 	}
@@ -74,7 +73,7 @@ int main(int argc, char **argv)
     while (play) 
 		{
 			inputRank = user_play(&buf);
-			strcat(buf,inputRank);
+			buf[0] = inputRank;
 			Rio_writen(clientfd, buf, strlen(buf)); //writes/sends it to server
 			while(Rio_readlineb(&rio, buf2, MAXLINE) != 0);  //reads in from server
 			Fputs(buf, stdout);

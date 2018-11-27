@@ -228,7 +228,7 @@ char user_play(struct player* target)
 ////////////////////////////////////////////////////////////////////
 char* display_hand(struct player* target){
   char* str = (char *) malloc(sizeof(char)*100);
-	char* print = "\n\nPlayer 1's Hand -";
+	char* print = "\n\nPlayer 1's Hand - ";
 	strcat(str, print);
   struct hand* temp = target->card_list;
   size_t len = strlen(str);
