@@ -28,8 +28,8 @@ void gofish(int connfd)
   char *tempStr;
   size_t sz;
   rio_t rio;
-  Rio_readinitb(&rio, connfd);
-/*    while((n = Rio_readlineb(&rio, inputRank, MAXLINE)) != 0) {
+  rio_readinitb(&rio, connfd);
+	/*    while((n = Rio_readlineb(&rio, inputRank, MAXLINE)) != 0) {
         printf("server received %d bytes\n", n);
         Rio_writen(connfd, inputRank, n);
     }
@@ -49,8 +49,8 @@ void gofish(int connfd)
 		free(tempStr);
   } 
 	else{
-	  while((n = Rio_readlineb(&rio, inputRank, MAXLINE)) != 0) {
-      Rio_writen(connfd, inputRank, n);
+	  while((n = rio_readlineb(&rio, inputRank, MAXLINE)) != 0) {
+      rio_writen(connfd, inputRank, n);
     }  
 	  temp = copy_hand_list(&user);
     transferCards = search(&computer, inputRank[0]); //Check player 2's hand to see if they have that rank
@@ -67,9 +67,9 @@ void gofish(int connfd)
 	    }
 	    strcat(buf, "\n  - Player 1 gets another turn");
 	   //send client hand again before restarting function
-	    Rio_written(connfd, buf, strlen(buf)+1);
+	    rio_writen(connfd, buf, strlen(buf)+1);
 			strcpy(inputRank, display_hand(&user));
-	    Rio_written(connfd, inputRank, n);
+	    rio_writen(connfd, inputRank, n);
       display_book(&user,1);                        //Display player 1's book 
       display_book(&computer,2);                    //Display user 1's book
 	    return;
@@ -98,9 +98,9 @@ void gofish(int connfd)
  	    if(nextCard->rank != inputRank[0]){
         strcat(buf, "\n  - Player 2's turn");
 	      //send client hand again before restarting function
-				Rio_written(connfd, buf, strlen(buf)+1);
+				rio_writen(connfd, buf, strlen(buf)+1);
 		    strcpy(inputRank, display_hand(&user));
-	      Rio_written(connfd, inputRank, n);
+	      rio_writen(connfd, inputRank, n);
 	      display_book(&user,1);                        //Display player 1's book 
         display_book(&computer,2);                    //Display user 1's book
 				memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
@@ -108,9 +108,9 @@ void gofish(int connfd)
       }
       else{
         strcat(buf, "\n  - Player 1 gets another turn");             //If the card they draw is what they asked for they get another turn
-  		  Rio_written(connfd, buf, strlen(buf)+1);
+  		  rio_writen(connfd, buf, strlen(buf)+1);
 				strcpy(inputRank, display_hand(&user));
-	      Rio_written(connfd, inputRank, n);
+	      rio_writen(connfd, inputRank, n);
 	      display_book(&user,1);                        //Display player 1's book 
         display_book(&computer,2);                    //Display user 1's book
 	     	memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
@@ -176,7 +176,7 @@ void gofish(int connfd)
         }
 	    }
     }
-	Rio_written(connfd, buf, (strlen(buf)+1)*sizeof(buf[0]));
+	rio_writen(connfd, buf, (strlen(buf)+1)*sizeof(buf[0]));
   memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
 	}
 }
@@ -203,15 +203,15 @@ void gofish(int connfd)
 		}
     else{strcat(buf, "\nERROR! - No one won!");}
     strcat(buf,"\nDo you want to play again?[Y/N]");
-		Rio_written(connfd, buf, (strlen(buf)+1*sizeof(buf[0])));
+		rio_writen(connfd, buf, (strlen(buf)+1*sizeof(buf[0])));
 		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
 
 /////////////////////Play Again///////////////////////////////////////////////
 
     char input;
     while(playAgain == 0){
-		  while((n = Rio_readlineb(&rio, inputRank, MAXLINE)) != 0) {
-		    Rio_writen(connfd, inputRank, n);
+		  while((n = rio_readlineb(&rio, inputRank, MAXLINE)) != 0) {
+		    rio_writen(connfd, inputRank, n);
 			 }  
      // while((getchar()) != '\n');
       if(tolower(inputRank) == 'y'){
@@ -275,7 +275,7 @@ void *thread(void *vargp)
     int connfd = *((int *)vargp);
     Pthread_detach(pthread_self()); //line:conc:echoservert:detach
     Free(vargp);                    //line:conc:echoservert:free
-    echo(connfd);
+    gofish(connfd);
     Close(connfd);
     return NULL;
 }
