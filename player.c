@@ -227,26 +227,28 @@ char user_play(struct player* target)
 ///////////////////Returns nothing//////////////////////////////////
 ////////////////////////////////////////////////////////////////////
 char* display_hand(struct player* target){
-  char* str = "\n\nPlayer 1's Hand -";
+  char* str = (char *) malloc(sizeof(char)*70);
+	char* print = "\n\nPlayer 1's Hand -";
+	strcat(str, print);
   struct hand* temp = target->card_list;
   while(temp != NULL){
-		str = strcat(str,temp->top.rank);
-		str = strcat(str,temp->top.suit);
+	  strcat(str,temp->top.rank);
+	//	 strcat(str,temp->top.suit);
 //   printf(" %c%c", temp->top.rank, temp->top.suit);
     temp = temp->next; 
   }
-	char newstr[strlen(str)];
-	strcpy(newstr, str);
-	return newstr;
+//	char newstr[strlen(str)];
+//	strcpy(newstr, str);
+	return str;
 }
 
 char* display_book(struct player* target, int id){
   int sz = snprintf(NULL, 0, "\nPlayer %d's Book - %s ", id, target->book);
   char*	tempStr = (char *)malloc(sz+1);
 	snprintf(tempStr, sz+1, "\nPlayer %d's Book - %s",id,target->book);
-	char newstr[strlen(tempStr)];
-  strcpy(newstr, tempStr);
-	return newstr;
+  char* str = (char *) malloc(sizeof(char)*25);
+	strcat(str, tempStr);
+	return str;
 }
 
 
