@@ -1,25 +1,38 @@
-/* 
- *servert.c - A concurrent echo server using threads
- */
-/* $begin echoservertmain */
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include "deck.h"
+#include "player.h"
+#include <ctype.h>
 #include "csapp.h"
+
+  char bookAdded;
+ // char inputRank;
+  int transferCards;
+  int play = 1; //1 true, 0 false
+  int turn = 1; //1 true, 0 false
+  int win = 0;  //1 true, 0 false
+  int playAgain;
+  struct card* nextCard;
+  struct hand* temp;
+
 
 void *thread(void *vargp);
 
 void gofish(int connfd)
 {
     int n;
-    char buf[MAXLINE];
+    char inputRank[MAXLINE];
     rio_t rio;
 
     Rio_readinitb(&rio, connfd);
-    while((n = Rio_readlineb(&rio, buf, MAXLINE)) != 0) {
+/*    while((n = Rio_readlineb(&rio, inputRank, MAXLINE)) != 0) {
         printf("server received %d bytes\n", n);
-        Rio_writen(connfd, buf, n);
+        Rio_writen(connfd, inputRank, n);
     }
-	
+*/	
 /////////////////////Player 1's Turn///////////////////////////////////
-      while((turn==1) && (win == 0)){
         display_hand(&user);                          //Display player 1's hand
         display_book(&user,1);                        //Display player 1's book 
         display_book(&computer,2);                    //Display user 1's book
@@ -28,28 +41,33 @@ void gofish(int connfd)
 	  add_card(&user,nextCard);
 	  if(add_card(&user,nextCard) != 0) return -1;
 	  printf("\n  - Go Fish, Player 1 draws %c%c,", nextCard->rank, nextCard->suit);
-	  turn = 0;
 	} 
 	else{
-	  inputRank = user_play(&user);                 //Prompt player 1 to enter a rank
+	  while((n = Rio_readlineb(&rio, inputRank, MAXLINE)) != 0) {
+            printf("server received %d bytes\n", n);
+            Rio_writen(connfd, inputRank, n);
+    	  }  
 	  temp = copy_hand_list(&user);
-          transferCards = search(&computer, inputRank); //Check player 2's hand to see if they have that rank
+          transferCards = search(&computer, inputRank[0]); //Check player 2's hand to see if they have that rank
      /////////////If they have the rank transfer the cards///////////////////////////////////  
 	  if(transferCards == 1){          
             printf("  - Player 2 has");
-  	    transfer_cards(&computer, &user, inputRank);
-  	    if(transfer_cards(&computer, &user, inputRank) < 0) return -1;
-            bookAdded = check_add_book(&user, inputRank);
+  	    transfer_cards(&computer, &user, inputRank[0]);
+  	    if(transfer_cards(&computer, &user, inputRank[0]) < 0) return -1;
+            bookAdded = check_add_book(&user, inputRank[0]);
             if(bookAdded != 0){
 	      print_book_match(bookAdded,temp,1);
               win = game_over(&user);
-              if(win == 1) break;
+              if(win == 1) return;
 	    }
 	    printf("\n  - Player 1 gets another turn");
+	   //send client hand again before restarting function
+	    Rio_written(connfd, inputRank, n);
+	    return;
           }
      ////////////Go Fish/////////////////////////////////////////////////////////////
           else{                          
-            printf("  - Player 2 has no %c's", inputRank);
+            printf("  - Player 2 has no %c's", inputRank[0]);
             nextCard = next_card();                                    //Draw a card from deck
             add_card(&user, nextCard);
             if(add_card(&user, nextCard) != 0) return -1;
@@ -58,11 +76,13 @@ void gofish(int connfd)
             if(bookAdded != 0){
               print_book_match(bookAdded, temp,1);
               win = game_over(&user);
-              if(win == 1) break;
+              if(win == 1) return;
             }
- 	    if(nextCard->rank != inputRank){
+ 	    if(nextCard->rank != inputRank[0]){
               printf("\n  - Player 2's turn");
-              turn = 0;
+	      //send client hand again before restarting function
+	      Rio_written(connfd, inputRank, n);
+	      return;
             }
             else{
               printf("\n  - Player 1 gets another turn");             //If the card they draw is what they asked for they get another turn
@@ -84,14 +104,14 @@ void gofish(int connfd)
 	  turn = 1;
 	}
 	else{
-	  inputRank =  computer_play(&computer);             //Prompt player 1 to enter a rank
+	  inputRank[0] =  computer_play(&computer);             //Prompt player 1 to enter a rank
        	  temp = copy_hand_list(&computer);
-          transferCards = search(&user, inputRank);          //Check player 2's hand to see if they have that rank
+          transferCards = search(&user, inputRank[0]);          //Check player 2's hand to see if they have that rank
     ///////////////////////If they have the card - transfer cards//////////////
           if(transferCards == 1){                       
             printf("\n  - Player 1 has");
-	    transfer_cards(&user, &computer, inputRank);
-            bookAdded = check_add_book(&computer, inputRank);
+	    transfer_cards(&user, &computer, inputRank[0]);
+            bookAdded = check_add_book(&computer, inputRank[0]);
             if(bookAdded != 0){
 	      print_book_match(bookAdded,temp, 2);
               win = game_over(&computer);
@@ -101,7 +121,7 @@ void gofish(int connfd)
           }
     /////////////////////Go Fish//////////////////////////////////////////////
           else{                            //If they dont have the card exit the loop and switch to user 2's turn
-            printf("\n  - Player 1 has no %c's", inputRank);
+            printf("\n  - Player 1 has no %c's", inputRank[0]);
             nextCard = next_card();  //Draw a card from deck
             if(add_card(&computer, nextCard) != 0) return -1;
             printf("\n  - Go Fish, Player 2 draws a card");
@@ -112,7 +132,7 @@ void gofish(int connfd)
               win = game_over(&computer);
               if(win == 1) break;
             }
-	    if(nextCard->rank != inputRank){
+	    if(nextCard->rank != inputRank[0]){
               printf("\n  - Player 1's turn");
 	      turn = 1; 
             }
@@ -177,16 +197,7 @@ int main(int argc, char **argv)
     }
     listenfd = Open_listenfd(argv[1]);
 //////////////////////Starts the game/////////////////////////
-  char bookAdded;
-  char inputRank;
-  int transferCards;
-  int play = 1; //1 true, 0 false
-  int turn = 1; //1 true, 0 false
-  int win = 0;  //1 true, 0 false
-  int playAgain;
-  struct card* nextCard;
-  struct hand* temp;
-  user.book[0] = '\0'; 
+   user.book[0] = '\0'; 
   computer.book[0] = '\0';
 	
 while(play==1){                              //start game
