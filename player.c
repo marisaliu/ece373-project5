@@ -238,9 +238,12 @@ char* display_hand(struct player* target){
 return str;
 }
 
-void display_book(struct player* target, int id){
-  printf("\nPlayer %d's Book - ", id);
-  printf("%s", target->book);
+char* display_book(struct player* target, int id){
+  int sz = snprintf(NULL, 0, "\nPlayer %d's Book - %s ", id, target->book);
+	tempStr = (char *)malloc(sz+1);
+	snprintf(tempStr, sz+1, "\nPlayer %d's Book - %s",id,target->book);
+	return tempStr
+  
 }
 
 
