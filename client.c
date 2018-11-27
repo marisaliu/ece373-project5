@@ -48,7 +48,7 @@ char user_play(char* str)
 int main(int argc, char **argv) 
 {
     int clientfd;
-    char *host, *port, buf[MAXLINE];
+    char *host, *port, buf[MAXLINE],buf2[MAXLINE];
     rio_t rio;
 		int play = 1;
 
@@ -64,11 +64,13 @@ int main(int argc, char **argv)
 		char inputRank;
 		Rio_readlineb(&rio,buf,MAXLINE);
 		Fputs(buf,stdout);
+		Rio_readlineb(&rio,buf2,MAXLINE);
+		Fputs(buf,stdout);
 		//while play is true prompt the user for a rank and then display his hand and the books
     while (play) {
 			inputRank = user_play(&buf);
 			Rio_writen(clientfd, inputRank, strlen(buf)); //writes/sends it to server
-			Rio_readlineb(&rio, buf, MAXLINE);  //reads in from server
+			Rio_readlineb(&rio, buf2, MAXLINE);  //reads in from server
 			Fputs(buf, stdout);
 			Rio_readlineb(&rio, buf, MAXLINE);
 			Fputs(buf, stdout);
