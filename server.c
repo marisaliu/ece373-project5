@@ -86,9 +86,11 @@ void gofish(int connfd)
             }
             else{
               printf("\n  - Player 1 gets another turn");             //If the card they draw is what they asked for they get another turn
+              Rio_written(connfd, inputRank, n);
+	      return;
             } 
 	  }
-        }
+        
       
 
 ////////////////////Player 2's turn/////////////////////////////////////////////
@@ -181,8 +183,8 @@ void gofish(int connfd)
       }
     }
   }
-}
-}
+
+
 
 int main(int argc, char **argv) 
 {
@@ -215,6 +217,8 @@ while(play==1){                              //start game
 	*connfdp = Accept(listenfd, (SA *) &clientaddr, &clientlen); //line:conc:echoservert:endmalloc
 	Pthread_create(&tid, NULL, thread, connfdp);
     }
+  }
+}
 }
 
 /* Thread routine */
