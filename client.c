@@ -70,9 +70,9 @@ int main(int argc, char **argv)
     while (play) {
 			inputRank = user_play(&buf);
 			Rio_writen(clientfd, inputRank, strlen(buf)); //writes/sends it to server
-			Rio_readlineb(&rio, buf2, MAXLINE);  //reads in from server
+			Rio_readlineb(&rio, buf, MAXLINE);  //reads in from server
 			Fputs(buf, stdout);
-			Rio_readlineb(&rio, buf, MAXLINE);
+			Rio_readlineb(&rio, buf2, MAXLINE);
 			Fputs(buf, stdout);
     }
     Close(clientfd); //line:netp:echoclient:close
