@@ -155,7 +155,7 @@ char * display_hand(struct player* target);
  * ----------------------
  * Print out target's books
  */
-void display_book(struct player* target, int id);
+char * display_book(struct player* target, int id);
 
 /*
  * Function: print_book_match

@@ -240,9 +240,9 @@ return str;
 
 char* display_book(struct player* target, int id){
   int sz = snprintf(NULL, 0, "\nPlayer %d's Book - %s ", id, target->book);
-	tempStr = (char *)malloc(sz+1);
+  char*	tempStr = (char *)malloc(sz+1);
 	snprintf(tempStr, sz+1, "\nPlayer %d's Book - %s",id,target->book);
-	return tempStr
+	return tempStr;
   
 }
 
