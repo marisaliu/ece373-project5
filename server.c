@@ -25,6 +25,28 @@ void echo(int connfd)
         Rio_writen(connfd, buf, n);
     }
 }
+
+int main(int argc, char **argv) 
+{
+    int listenfd, *connfdp;
+    socklen_t clientlen;
+    struct sockaddr_storage clientaddr;
+    pthread_t tid; 
+
+    if (argc != 2) {
+	fprintf(stderr, "usage: %s <port>\n", argv[0]);
+	exit(0);
+    }
+    listenfd = Open_listenfd(argv[1]);
+
+    while (1) {
+        clientlen=sizeof(struct sockaddr_storage);
+	connfdp = Malloc(sizeof(int)); //line:conc:echoservert:beginmalloc
+	*connfdp = Accept(listenfd, (SA *) &clientaddr, &clientlen); //line:conc:echoservert:endmalloc
+	Pthread_create(&tid, NULL, thread, connfdp);
+    }
+}
+
 */
 /*
 char * serialize_char(char* buf, char in);
