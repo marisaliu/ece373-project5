@@ -231,12 +231,16 @@ char* display_hand(struct player* target){
 	char* print = "\n\nPlayer 1's Hand -";
 	strcat(str, print);
   struct hand* temp = target->card_list;
-  while(temp != NULL){
-	  strcat(str,temp->top.rank);
-	//	 strcat(str,temp->top.suit);
+  size_t len = strlen(str);
+ while(temp != NULL){
+	 str[len++] = temp->top.rank;
+	 str[len++] = temp->top.rank;
+	//  strcat(str,temp->top.rank);
+//	  strcat(str,temp->top.suit);
 //   printf(" %c%c", temp->top.rank, temp->top.suit);
     temp = temp->next; 
   }
+	str[len] = '\0';
 //	char newstr[strlen(str)];
 //	strcpy(newstr, str);
 	return str;
