@@ -35,7 +35,7 @@ void gofish(int connfd)
         Rio_writen(connfd, inputRank, n);
     }
 */
-if(initTurn==1){
+/*if(initTurn==1){
 		initTurn=0;
 		strcat(buf, display_hand(&user));                          //Display player 1's hand
 		rio_writen(connfd, buf, strlen(buf)+1);
@@ -46,16 +46,24 @@ if(initTurn==1){
 		rio_writen(connfd, buf, strlen(buf)+1);
 		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
 		while((Rio_readlineb(&rio, NULL, 1)) != 0);
-}	
+}	*/
 /////////////////////Player 1's Turn///////////////////////////////////
-  strcat(buf, display_hand(&user));                          //Display player 1's hand
-rio_writen(connfd, buf, strlen(buf)+1);
-memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
-//	strcat(buf, display_book(&user,1));                        //Display player 1's book 
-//  strcat(buf, display_book(&computer,2));                    //Display user 1's book
-//rio_writen(connfd, buf, strlen(buf)+1);
-//memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
-
+printf("ap\n");
+		strcat(buf, display_hand(&user));                          //Display player 1's hand
+		rio_writen(connfd, buf, strlen(buf)+1);
+		while(n=(Rio_readlineb(&rio, buf, 1)) != 0){
+			rio_writen(connfd, buf, n);
+		}
+		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
+printf("ple\n");
+		strcat(buf, display_book(&user,1));                        //Display player 1's book 
+		strcat(buf, display_book(&computer,2));                    //Display user 1's book
+		rio_writen(connfd, buf, strlen(buf)+1);
+		while(n=(Rio_readlineb(&rio, buf, 1)) != 0){
+			rio_writen(connfd, buf, n);
+		}
+		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
+printf("apple\n");
 /*  if(user.hand_size == 0){                      //If player's hand is empty, player will draw a card and end their turn
 	  nextCard = next_card();
 	  add_card(&user,nextCard);
@@ -269,7 +277,8 @@ int main(int argc, char **argv)
 	
 while(play==1){                              //start game
     playAgain = 0;
-    if(shuffle() != 0) return -1;                                  //shuffle cards
+    initTurn = 1;
+		if(shuffle() != 0) return -1;                                  //shuffle cards
     if(deal_player_cards(&user) != 0) return -1;   //deal cards
     if(deal_player_cards(&computer) != 0) return -1;
     user.hand_size = 7;
