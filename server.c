@@ -33,9 +33,11 @@ void gofish(int connfd)
     }
 */	
 /////////////////////Player 1's Turn///////////////////////////////////
+/*
         display_hand(&user);                          //Display player 1's hand
         display_book(&user,1);                        //Display player 1's book 
         display_book(&computer,2);                    //Display user 1's book
+*/
         if(user.hand_size == 0){                      //If player's hand is empty, player will draw a card and end their turn
 	  nextCard = next_card();
 	  add_card(&user,nextCard);
@@ -62,7 +64,10 @@ void gofish(int connfd)
 	    }
 	    printf("\n  - Player 1 gets another turn");
 	   //send client hand again before restarting function
+	    inputRank = display_hand(&user);
 	    Rio_written(connfd, inputRank, n);
+            display_book(&user,1);                        //Display player 1's book 
+            display_book(&computer,2);                    //Display user 1's book
 	    return;
           }
      ////////////Go Fish/////////////////////////////////////////////////////////////
@@ -81,12 +86,18 @@ void gofish(int connfd)
  	    if(nextCard->rank != inputRank[0]){
               printf("\n  - Player 2's turn");
 	      //send client hand again before restarting function
+	      inputRank = display_hand(&user);
 	      Rio_written(connfd, inputRank, n);
+	      display_book(&user,1);                        //Display player 1's book 
+              display_book(&computer,2);                    //Display user 1's book
 	      return;
             }
             else{
               printf("\n  - Player 1 gets another turn");             //If the card they draw is what they asked for they get another turn
-              Rio_written(connfd, inputRank, n);
+              inputRank = display_hand(&user);
+	      Rio_written(connfd, inputRank, n);
+              display_book(&user,1);                        //Display player 1's book 
+              display_book(&computer,2);                    //Display user 1's book
 	      return;
             } 
 	  }
