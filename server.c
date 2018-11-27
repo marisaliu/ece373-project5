@@ -11,7 +11,8 @@
  // char inputRank;
   int transferCards;
   int play = 1; //1 true, 0 false
-  int turn = 1; //1 true, 0 false
+  int initTurn;
+	int turn = 1; //1 true, 0 false
   int win = 0;  //1 true, 0 false
   int playAgain;
   struct card* nextCard;
@@ -33,7 +34,19 @@ void gofish(int connfd)
         printf("server received %d bytes\n", n);
         Rio_writen(connfd, inputRank, n);
     }
-*/	
+*//*
+if(initTurn==1){
+		initTurn=0;
+		strcat(buf, display_hand(&user));                          //Display player 1's hand
+		rio_writen(connfd, buf, strlen(buf)+1);
+		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
+		while((Rio_readlineb(&rio, NULL, 1)) != 0);
+		strcat(buf, display_book(&user,1));                        //Display player 1's book 
+		strcat(buf, display_book(&computer,2));                    //Display user 1's book
+		rio_writen(connfd, buf, strlen(buf)+1);
+		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
+		while((Rio_readlineb(&rio, NULL, 1)) != 0);
+}*/	
 /////////////////////Player 1's Turn///////////////////////////////////
   strcat(buf, display_hand(&user));                          //Display player 1's hand
 rio_writen(connfd, buf, strlen(buf)+1);
@@ -241,7 +254,7 @@ memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
 
 int main(int argc, char **argv) 
 {
-    int listenfd, *connfdp;
+		int listenfd, *connfdp;
   	socklen_t clientlen;
     struct sockaddr_storage clientaddr;
     pthread_t tid; 
@@ -256,7 +269,8 @@ int main(int argc, char **argv)
   computer.book[0] = '\0';
 
 while(play==1){                              //start game
-    playAgain = 0;
+    initTurn=1;
+		playAgain = 0;
     if(shuffle() != 0) return -1;                                  //shuffle cards
     if(deal_player_cards(&user) != 0) return -1;   //deal cards
     if(deal_player_cards(&computer) != 0) return -1;
