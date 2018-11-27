@@ -35,9 +35,9 @@ void gofish(int connfd)
     }
 */	
 /////////////////////Player 1's Turn///////////////////////////////////
-  strcat(buf, display_hand(&user));                          //Display player 1's hand
-  strcat(buf, display_book(&user,1));                        //Display player 1's book 
-  strcat(buf, display_book(&computer,2));                    //Display user 1's book
+ // strcat(buf, display_hand(&user));                          //Display player 1's hand
+ // strcat(buf, display_book(&user,1));                        //Display player 1's book 
+ // strcat(buf, display_book(&computer,2));                    //Display user 1's book
   if(user.hand_size == 0){                      //If player's hand is empty, player will draw a card and end their turn
 	  nextCard = next_card();
 	  add_card(&user,nextCard);
@@ -48,7 +48,7 @@ void gofish(int connfd)
 	  strcat(buf, tempStr);
 		free(tempStr);
   } 
-	else{
+/*	else{
 	  while((n = rio_readlineb(&rio, inputRank, MAXLINE)) != 0) {
       rio_writen(connfd, inputRank, n);
     }  
@@ -224,12 +224,12 @@ void gofish(int connfd)
       else if(tolower(input) == 'n'){
         play = 0;
         exit(0);
-      }
+      }*/
 //client handles wrong inputs
 /*      else {
         printf("\nError! Please enter Y or N");
       }*/ 
-    }
+  //  }
   }
 
 
