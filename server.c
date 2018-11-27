@@ -38,10 +38,10 @@ void gofish(int connfd)
   strcat(buf, display_hand(&user));                          //Display player 1's hand
 rio_writen(connfd, buf, strlen(buf)+1);
 memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
-	strcat(buf, display_book(&user,1));                        //Display player 1's book 
-  strcat(buf, display_book(&computer,2));                    //Display user 1's book
-rio_writen(connfd, buf, strlen(buf)+1);
-memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
+//	strcat(buf, display_book(&user,1));                        //Display player 1's book 
+//  strcat(buf, display_book(&computer,2));                    //Display user 1's book
+//rio_writen(connfd, buf, strlen(buf)+1);
+//memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
 
 /*  if(user.hand_size == 0){                      //If player's hand is empty, player will draw a card and end their turn
 	  nextCard = next_card();
