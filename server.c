@@ -35,9 +35,9 @@ void gofish(int connfd)
     }
 */	
 /////////////////////Player 1's Turn///////////////////////////////////
- // display_hand(&user);                          //Display player 1's hand
- // display_book(&user,1);                        //Display player 1's book 
- // display_book(&computer,2);                    //Display user 1's book
+  strcat(buf, display_hand(&user));                          //Display player 1's hand
+  strcat(buf, display_book(&user,1));                        //Display player 1's book 
+  strcat(buf, display_book(&computer,2));                    //Display user 1's book
   if(user.hand_size == 0){                      //If player's hand is empty, player will draw a card and end their turn
 	  nextCard = next_card();
 	  add_card(&user,nextCard);
@@ -120,9 +120,9 @@ void gofish(int connfd)
         
 ////////////////////Player 2's turn/////////////////////////////////////////////
   while((turn == 0) && (win == 0)){
-    display_hand(&user);                               //Display player 1's hand
-    display_book(&user,1);                         //Display user 1's book
-    display_book(&computer,2);                         //Display user 2's book
+    strcat(buf, display_hand(&user));                               //Display player 1's hand
+    strcat(buf, display_book(&user,1));                         //Display user 1's book
+    strcat(buf, display_book(&computer,2));                         //Display user 2's book
     if(computer.hand_size == 0){
 		  nextCard = next_card();
 		  add_card(&computer,nextCard);
@@ -183,39 +183,52 @@ void gofish(int connfd)
 
 
 ////////////////////////End of Game!/////////////////////////////////////////////
-    display_hand(&user);
-    display_book(&user, 1);
-    display_book(&computer,2);
+    strcat(buf, display_hand(&user));
+    strcat(buf, display_book(&user, 1));
+    strcat(buf, display_book(&computer,2));
 
     if(game_over(&user) == 1){
-      printf("\nPlayer 1 Wins! %d-%d", strlen(user.book), strlen(computer.book));
-    }
+			sz = snprintf(NULL, 0, "\nPlayer 1 Wins! %d-%d", strlen(user.book), strlen(computer.book));
+			tempStr = (char *)malloc(sz+1);
+      snprintf(tempStr, sz+1, "\nPlayer 1 Wins! %d-%d", strlen(user.book), strlen(computer.book));
+			strcat(buf, tempStr);
+			free(tempStr);
+		}
     else if(game_over(&computer) == 1){
-      printf("\nPlayer 2 Wins! %d-%d", strlen(computer.book), strlen(user.book));
-    }
-    else{printf("\nERROR! - No one won!");}
-    printf("\nDo you want to play again?[Y/N]");
+      sz = snprintf(NULL, 0, "\nPlayer 2 Wins! %d-%d", strlen(computer.book), strlen(user.book));
+			tempStr = (char *)malloc(sz+1);
+			snprintf(tempStr, sz+1, "\nPlayer 2 Wins! %d-%d", strlen(computer.book), strlen(user.book));
+			strcat(buf, tempStr);
+			free(tempStr);
+		}
+    else{strcat(buf, "\nERROR! - No one won!");}
+    strcat(buf,"\nDo you want to play again?[Y/N]");
+		Rio_written(connfd, buf, (strlen(buf)+1*sizeof(buf[0])));
+		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
 
 /////////////////////Play Again///////////////////////////////////////////////
 
     char input;
     while(playAgain == 0){
-      scanf(" %c", &input);
-      while((getchar()) != '\n');
-      if(tolower(input) == 'y'){
+		  while((n = Rio_readlineb(&rio, inputRank, MAXLINE)) != 0) {
+		    Rio_writen(connfd, inputRank, n);
+			 }  
+     // while((getchar()) != '\n');
+      if(tolower(inputRank) == 'y'){
         if(reset_player(&user) != 0) return -1;
-	if(reset_player(&computer) != 0) return -1;
-	playAgain = 1;
-	win = 0;
+				if(reset_player(&computer) != 0) return -1;
+				playAgain = 1;
+				win = 0;
         break;
       }
       else if(tolower(input) == 'n'){
         play = 0;
         exit(0);
       }
-      else {
+//client handles wrong inputs
+/*      else {
         printf("\nError! Please enter Y or N");
-      }
+      }*/ 
     }
   }
 
