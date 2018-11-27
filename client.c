@@ -21,9 +21,10 @@ char user_play(char* str)
 	int boolInHand = 0;
 	char rank[(strlen(str)/2)+1];
 	int x = 0;
-	for(int i =0; i < ((strlen(str)/2)+1); i++){
+	for(int i =17; i < strlen(str); i++){
 		if(!isspace(str[i])){
 			rank[x] = str[i];
+			printf("%c\n", rank[x]);
 			x++;
 		}
 	}
