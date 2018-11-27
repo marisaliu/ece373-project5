@@ -70,6 +70,8 @@ int main(int argc, char **argv)
 			Rio_writen(clientfd, inputRank, strlen(buf)); //writes/sends it to server
 			Rio_readlineb(&rio, buf, MAXLINE);  //reads in from server
 			Fputs(buf, stdout);
+			Rio_readlineb(&rio, buf, MAXLINE);
+			Fputs(buf, stdout);
     }
     Close(clientfd); //line:netp:echoclient:close
     exit(0);
