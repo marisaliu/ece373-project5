@@ -84,9 +84,14 @@ int index = 1;
 			else if(strcmp(buf,"3") == 0){
 			  Fgets(buf, MAXLINE, stdin); 
 				Rio_writen(clientfd, buf, strlen(buf));
-				Rio_readlineb(&rio, buf, MAXLINE);
-				Fputs(buf, stdout);
-				printf("\n");
+				if(strcmp(buf,"N") == 0 || strcmp(buf,"n") == 0){
+					play = 0;
+				}
+			  else{
+					Rio_readlineb(&rio, buf, MAXLINE);
+					Fputs(buf, stdout);
+					printf("\n");
+				}
 			}
 			else{
 				Fputs(buf,stdout);
