@@ -103,8 +103,18 @@ while((turn == 1) && (win == 0)){
   	  if(transfer_cards(&computer, &user, inputRank[0]) < 0) return -1;
       bookAdded = check_add_book(&user, inputRank[0]);
       if(bookAdded != 0){
-				print_book_match(bookAdded,temp,1);
-        win = game_over(&user);
+				strcpy(buf, print_book_match(bookAdded,temp,1));
+				rio_writen(connfd, buf, MAXLINE);
+				printf("%s", buf);
+				sz = snprintf("  - Player 1 books %c\n", bookAdded);
+				tempStr = (char *)malloc(sz + 1);
+				snprintf(tempStr, sz+1, "  - Player 1 books %c\n", bookAdded);
+				strcpy(buf, tempStr);
+				free(tempStr);
+				rio_writen(connfd, buf, MAXLINE);
+				printf("%s", buf);
+
+				win = game_over(&user);
         if(win == 1) break;
 	    }
 	    strcpy(buf, "  - Player 1 gets another turn\n");
@@ -132,8 +142,19 @@ while((turn == 1) && (win == 0)){
       printf("%s", buf);
 			bookAdded = check_add_book(&user, nextCard->rank);         //Checks if a book is made 
       if(bookAdded != 0){
-        print_book_match(bookAdded, temp,1);
-        win = game_over(&user);
+        strcpy(buf, print_book_match(bookAdded,temp,1));
+				rio_writen(connfd, buf, MAXLINE);
+				printf("%s", buf);
+				sz = snprintf("  - Player 1 books %c\n", bookAdded);
+				tempStr = (char *)malloc(sz + 1);
+				snprintf(tempStr, sz+1, "  - Player 1 books %c\n", bookAdded);
+				strcpy(buf, tempStr);
+				free(tempStr);
+				rio_writen(connfd, buf, MAXLINE);
+				printf("%s", buf);
+
+
+				win = game_over(&user);
         if(win == 1) break;
       }
  	    if(nextCard->rank != inputRank[0]){
@@ -181,8 +202,18 @@ while((turn == 1) && (win == 0)){
 				transfer_cards(&user, &computer, inputRank[0]);
         bookAdded = check_add_book(&computer, inputRank[0]);
         if(bookAdded != 0){
-					print_book_match(bookAdded,temp, 2);
-          win = game_over(&computer);
+          strcpy(buf, print_book_match(bookAdded,temp,2));
+					rio_writen(connfd, buf, MAXLINE);
+					printf("%s", buf);
+					sz = snprintf("  - Player 2 books %c\n", bookAdded);
+					tempStr = (char *)malloc(sz + 1);
+					snprintf(tempStr, sz+1, "  - Player 2 books %c\n", bookAdded);
+					strcpy(buf, tempStr);
+					free(tempStr);
+					rio_writen(connfd, buf, MAXLINE);
+					printf("%s", buf);
+
+					win = game_over(&computer);
           if(win == 1) break;
 			  }  
 	      strcpy(buf, "Player 2 gets another turn\n");
@@ -212,8 +243,18 @@ while((turn == 1) && (win == 0)){
 					free(tempStr);
 					rio_writen(connfd, buf, MAXLINE);
 					printf("%s", buf);
-					print_book_match(bookAdded,temp,2);
-          win = game_over(&computer);
+          strcpy(buf, print_book_match(bookAdded,temp,2));
+					rio_writen(connfd, buf, MAXLINE);
+					printf("%s", buf);
+					sz = snprintf("  - Player 2 books %c\n", bookAdded);
+					tempStr = (char *)malloc(sz + 1);
+					snprintf(tempStr, sz+1, "  - Player 2 books %c\n", bookAdded);
+					strcpy(buf, tempStr);
+					free(tempStr);
+					rio_writen(connfd, buf, MAXLINE);
+					printf("%s", buf);
+ 
+					win = game_over(&computer);
           if(win == 1) break;
         }
 				if(nextCard->rank != inputRank[0]){
