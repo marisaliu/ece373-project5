@@ -53,7 +53,7 @@ int index = 1;
     rio_t rio;
 		int play = 1;
 		int n;
-		char* hand;
+		char hand[MAXLINE];
     if (argc != 3) {
 	fprintf(stderr, "usage: %s <host> <port>\n", argv[0]);
 	exit(0);
@@ -69,14 +69,15 @@ int index = 1;
 		{
 			while((n=rio_readlineb(&rio,buf,MAXLINE))<2);
 		  if(strcmp(buf,"1") == 0){
+				while((n=rio_readlineb(&rio, buf, MAXLINE))<2);
 				strcpy(hand,buf);
 				Fputs(buf,stdout);
 				printf("\n");
 			}
 			else if(strcmp(buf,"2") == 0){
-				inputRank = user_play(&hand);
-				buf[0] = inputRank;
-				rio_writen(clientfd, buf, strlen(buf)); //writes/sends it to server
+				inputRank = user_play(hand);
+				sprintf(buf, "%c", inputRank);
+				rio_writen(clientfd, buf, MAXLINE); //writes/sends it to server
 				while(rio_readlineb(&rio, buf, MAXLINE)<2);  //reads in from server
 				Fputs(buf, stdout);
 				printf("\n");
