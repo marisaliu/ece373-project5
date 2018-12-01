@@ -30,9 +30,9 @@ void gofish(int connfd)
   size_t sz;
   rio_t rio;
   rio_readinitb(&rio, connfd);
-	/*    while((n = Rio_readlineb(&rio, inputRank, MAXLINE)) != 0) {
+	/*    while((n = rio_readlineb(&rio, inputRank, MAXLINE)) != 0) {
         printf("server received %d bytes\n", n);
-        Rio_writen(connfd, inputRank, n);
+        rio_writen(connfd, inputRank, n);
     }
 */
 /*if(initTurn==1){
@@ -40,30 +40,37 @@ void gofish(int connfd)
 		strcat(buf, display_hand(&user));                          //Display player 1's hand
 		rio_writen(connfd, buf, strlen(buf)+1);
 		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
-		while((Rio_readlineb(&rio, NULL, 1)) != 0);
+		while((rio_readlineb(&rio, NULL, 1)) != 0);
 		strcat(buf, display_book(&user,1));                        //Display player 1's book 
 		strcat(buf, display_book(&computer,2));                    //Display user 1's book
 		rio_writen(connfd, buf, strlen(buf)+1);
 		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
-		while((Rio_readlineb(&rio, NULL, 1)) != 0);
+		while((rio_readlineb(&rio, NULL, 1)) != 0);
 }	*/
 /////////////////////Player 1's Turn///////////////////////////////////
-printf("ap\n");
-		strcat(buf, display_hand(&user));                          //Display player 1's hand
-		rio_writen(connfd, buf, strlen(buf)+1);
-		while(n=(Rio_readlineb(&rio, buf, 1)) != 0){
-			rio_writen(connfd, buf, n);
-		}
+printf("sending hand\n");
+		while((n=rio_readlineb(&rio, buf, 2)) != 1);
+		printf("n = %d\n", n);
+		strcpy(buf, display_hand(&user));                          //Display player 1's hand
+		printf("buf length: %d\n", strlen(buf));
+		printf("buf contents: %s\n", buf);
+//		while((n=rio_readlineb(&rio, buf, 3)) != 2){
+		printf("sending\n");
+		rio_writen(connfd, buf, MAXLINE);
+//		}
+		//while(rio_readlineb(&rio, buf, 1) != 0);
+		//rio_writen(connfd, buf, strlen(buf)+1);
 		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
-printf("ple\n");
-		strcat(buf, display_book(&user,1));                        //Display player 1's book 
+printf("sending book\n");
+		while((n=rio_readlineb(&rio, buf, 2))!=1);
+		strcpy(buf, display_book(&user,1));                        //Display player 1's book 
 		strcat(buf, display_book(&computer,2));                    //Display user 1's book
-		rio_writen(connfd, buf, strlen(buf)+1);
-		while(n=(Rio_readlineb(&rio, buf, 1)) != 0){
-			rio_writen(connfd, buf, n);
-		}
+	//	while(n=(rio_readlineb(&rio, buf, 1)) != 0){
+		printf("buf length: %d\n", strlen(buf));
+		printf("buf contents: %s\n", buf);
+		rio_writen(connfd, buf, MAXLINE);
 		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
-printf("apple\n");
+printf("end\n");
 /*  if(user.hand_size == 0){                      //If player's hand is empty, player will draw a card and end their turn
 	  nextCard = next_card();
 	  add_card(&user,nextCard);
@@ -267,13 +274,13 @@ int main(int argc, char **argv)
     pthread_t tid; 
 
     if (argc != 2) {
-	fprintf(stderr, "usage: %s <port>\n", argv[0]);
-	exit(0);
+			fprintf(stderr, "usage: %s <port>\n", argv[0]);
+			exit(0);
     }
     listenfd = Open_listenfd(argv[1]);
 //////////////////////Starts the game/////////////////////////
    user.book[0] = '\0'; 
-  computer.book[0] = '\0';
+	 computer.book[0] = '\0';
 	
 while(play==1){                              //start game
     playAgain = 0;
@@ -286,10 +293,10 @@ while(play==1){                              //start game
 ///////////////////////Loops Through Players////////////////////////////////   
     while(win == 0){
     while (1) {
-        clientlen=sizeof(struct sockaddr_storage);
-	connfdp = Malloc(sizeof(int)); //line:conc:echoservert:beginmalloc
-	*connfdp = Accept(listenfd, (SA *) &clientaddr, &clientlen); //line:conc:echoservert:endmalloc
-	Pthread_create(&tid, NULL, thread, connfdp);
+      clientlen=sizeof(struct sockaddr_storage);
+			connfdp = Malloc(sizeof(int)); //line:conc:echoservert:beginmalloc
+			*connfdp = Accept(listenfd, (SA *) &clientaddr, &clientlen); //line:conc:echoservert:endmalloc
+			Pthread_create(&tid, NULL, thread, connfdp);
     }
   }
 }
