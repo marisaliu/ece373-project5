@@ -48,29 +48,22 @@ void gofish(int connfd)
 		while((rio_readlineb(&rio, NULL, 1)) != 0);
 }	*/
 /////////////////////Player 1's Turn///////////////////////////////////
-printf("sending hand\n");
+//printf("sending hand\n");
 		while((n=rio_readlineb(&rio, buf, 2)) != 1);
-		printf("n = %d\n", n);
 		strcpy(buf, display_hand(&user));                          //Display player 1's hand
-		printf("buf length: %d\n", strlen(buf));
-		printf("buf contents: %s\n", buf);
-//		while((n=rio_readlineb(&rio, buf, 3)) != 2){
-		printf("sending\n");
 		rio_writen(connfd, buf, MAXLINE);
-//		}
-		//while(rio_readlineb(&rio, buf, 1) != 0);
-		//rio_writen(connfd, buf, strlen(buf)+1);
 		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
-printf("sending book\n");
+//printf("sending book 1\n");
 		while((n=rio_readlineb(&rio, buf, 2))!=1);
 		strcpy(buf, display_book(&user,1));                        //Display player 1's book 
-		strcat(buf, display_book(&computer,2));                    //Display user 1's book
-	//	while(n=(rio_readlineb(&rio, buf, 1)) != 0){
-		printf("buf length: %d\n", strlen(buf));
-		printf("buf contents: %s\n", buf);
 		rio_writen(connfd, buf, MAXLINE);
 		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
-printf("end\n");
+//printf("sending book 2\n");
+		while((n=rio_readlineb(&rio, buf, 2))!=1);
+		strcpy(buf, display_book(&computer,2)); 
+		rio_writen(connfd, buf, MAXLINE);
+		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
+//printf("end\n");
 /*  if(user.hand_size == 0){                      //If player's hand is empty, player will draw a card and end their turn
 	  nextCard = next_card();
 	  add_card(&user,nextCard);

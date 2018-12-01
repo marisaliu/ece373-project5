@@ -71,24 +71,23 @@ int index = 1;
 //				buf[0] = '1';
 	//			printf("--\n");
 				rio_writen(clientfd, buf, 2); //writes/sends it to server
-//printf("buf length: %d\n", strlen(buf));
-//			  rio_readlineb(&rio,buf,MAXLINE);
-				while((n=rio_readlineb(&rio,buf,MAXLINE))<2){
-//					printf("received %d\n", n);
-				//	rio_writen(clientfd, buf, 1);
-				}
-		//		strcpy(buf,"11");
-		//		rio_writen(clientfd, buf, 2);
-//				if(n>0)printf("after received %d\n", n);
-//				printf("print out hand");
+				while((n=rio_readlineb(&rio,buf,MAXLINE))<2);
 				Fputs(buf,stdout);
+				printf("\n");
 				fflush(stdout);
-				memset(buf, 0, (strlen(buf)*sizeof(buf[0])));
-//			}
 //			else if(index%3 == 2){
+				//hand 1
 			 	rio_writen(clientfd, buf2, 2); //writes/sends it to server
 				while((n=rio_readlineb(&rio,buf2,MAXLINE))<2);
 	     	Fputs(buf2,stdout);
+				printf("\n");
+				fflush(stdout);
+				memset(buf2, 0, (strlen(buf)*sizeof(buf[0])));
+			 	//hand 2
+				rio_writen(clientfd, buf2, 2); //writes/sends it to server
+				while((n=rio_readlineb(&rio,buf2,MAXLINE))<2);
+	     	Fputs(buf2,stdout);
+				printf("\n");
 				fflush(stdout);
 				memset(buf2, 0, (strlen(buf)*sizeof(buf[0])));
 //     		  }
