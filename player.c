@@ -261,17 +261,21 @@ char* display_book(struct player* target, int id){
 //////////Prints the cards from the targets hand that become a book///
 //////////////////Returns nothing/////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
-void print_book_match(char inputRank, struct hand* targetHand, int id){
+char* print_book_match(char inputRank, struct hand* targetHand, int id){
   struct hand* temp = targetHand;
-  char *str
-	strcpy(str, "  - Player %d has", id);
+  char *str;
+	char *tempstr;
+	sprintf(str, "  - Player %d has", id);
   while(temp != NULL){
     if(temp->top.rank == inputRank){
-      printf(" %c%c", temp->top.rank, temp->top.suit);
+			sprintf(tempstr, " %c%c",temp->top.rank, temp->top.suit);
+		  strcat(str, tempstr);
+		//  printf(" %c%c", temp->top.rank, temp->top.suit);
     }
     temp = temp->next;
   }
-  printf("\n  - Player %d books %c", id, inputRank);
+	return str;
+ // printf("\n  - Player %d books %c", id, inputRank);
 }
 
 

@@ -162,7 +162,7 @@ char * display_book(struct player* target, int id);
  * --------------------------
  * Print out the target hand's matches with the input rank
  */
-void print_book_match(char inputRank, struct hand* targetHand, int id);
+char* print_book_match(char inputRank, struct hand* targetHand, int id);
 
 /*
  * Function: copy_hand_list
