@@ -10,7 +10,7 @@
 ////////////////////////////////////////////////////////////////
 int add_card(struct player* target, struct card* new_card)
 {
-  struct hand* temp;
+	struct hand* temp;
   temp = (struct hand*)malloc(sizeof(struct hand));
   if(temp ==NULL){
     printf("\nERROR IN add_card");
@@ -263,7 +263,8 @@ char* display_book(struct player* target, int id){
 //////////////////////////////////////////////////////////////////////
 void print_book_match(char inputRank, struct hand* targetHand, int id){
   struct hand* temp = targetHand;
-  printf("\n  - Player %d has", id);
+  char *str
+	strcpy(str, "  - Player %d has", id);
   while(temp != NULL){
     if(temp->top.rank == inputRank){
       printf(" %c%c", temp->top.rank, temp->top.suit);
