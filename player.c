@@ -126,6 +126,7 @@ char * transfer_cards(struct player* src, struct player* dest, char rank)
 			if(first==0){
 				sprintf(str, " %c%c", temp->top.rank, temp->top.suit);
 				first=1;
+				error = add_card(dest,&(temp->top));
 			}
 			else{
 				sprintf(str, "%s %c%c", str, temp->top.rank, temp->top.suit);
