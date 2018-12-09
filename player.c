@@ -115,29 +115,37 @@ int search(struct player* target, char rank)
  * Return 0 if no cards found/transferred, -1 if error, or value that 
  * indicates number of cards transferred
  *///////////////////////////////////////////////////////////////////
-int transfer_cards(struct player* src, struct player* dest, char rank)
+char * transfer_cards(struct player* src, struct player* dest, char rank)
 {
-  int error;
+  char *str = (char *)malloc(20*sizeof(char));
+	int error, first=0;
   struct hand* temp = src->card_list;
   while(temp!=NULL)
   {
     if(temp->top.rank == rank){
-      printf(" %c%c", temp->top.rank, temp->top.suit);
-      error = add_card(dest,&(temp->top));
+			if(first==0){
+				sprintf(str, " %c%c", temp->top.rank, temp->top.suit);
+				first=1;
+			}
+			else{
+				sprintf(str, "%s %c%c", str, temp->top.rank, temp->top.suit);
+				error = add_card(dest,&(temp->top));
+			}
       if(error == -1){
         printf("\nERROR IN transfer_cards");
-        return -1;
+        return "0";
       }
       error = remove_card(src, &(temp->top));
       if(error == -1){
         printf("\nERROR IN transfer_cards");
-        return -1;
+        return "0";
       }
       temp = src->card_list;
     }
     else{ temp = temp->next;}
   }
-  return 0;
+	
+  return str;
 }
 
 

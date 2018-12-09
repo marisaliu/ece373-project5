@@ -85,10 +85,10 @@ int main(int argc, char **argv)
 				inputRank = user_play(hand);
 				sprintf(buf, "%c", inputRank);
 	//			printf("input please send");
-				rio_writen(clientfd, buf,10	); //writes/sends it to server
-				while(rio_readlineb(&rio, buf, 150)<2);  //reads in from server
-				Fputs(buf, stdout);
-	//			printf("\n");
+				rio_writen(clientfd, buf,	10); //writes/sends it to server
+//				while(rio_readlineb(&rio, buf, 150)<2);  //reads in from server
+//				Fputs(buf, stdout);
+				printf("\n");
 			}
 			else if(strcmp(buf,"3") == 0){
 			  Fgets(buf, MAXLINE, stdin); 

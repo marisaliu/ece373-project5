@@ -74,8 +74,10 @@ while((turn == 1) && (win == 0)){
 			strcpy(buf, "  - Player 2 has");
 			rio_writen(connfd, buf, strlen(buf));
 			printf("%s", buf);
-			transfer_cards(&computer, &user, inputRank[0]);
-  	  if(transfer_cards(&computer, &user, inputRank[0]) < 0) return -1;
+			strcpy(buf, transfer_cards(&computer, &user, inputRank[0]));
+			printf("p2 has: %s\n", buf);
+			rio_writen(connfd, buf, strlen(buf));
+  	  if(strcmp(transfer_cards(&computer, &user, inputRank[0]), "0") == 0) return -1;
       bookAdded = check_add_book(&user, inputRank[0]);
       if(bookAdded != 0){
 				strcpy(buf, print_book_match(bookAdded,temp,1));
@@ -176,7 +178,8 @@ while((turn == 1) && (win == 0)){
         strcpy(buf, "  - Player 1 has");
 				rio_writen(connfd, buf, strlen(buf));
 				printf("%s", buf);
-				transfer_cards(&user, &computer, inputRank[0]);
+				strcpy(buf, transfer_cards(&user, &computer, inputRank[0]));
+				rio_writen(connfd, buf, strlen(buf));
         bookAdded = check_add_book(&computer, inputRank[0]);
         if(bookAdded != 0){
           strcpy(buf, print_book_match(bookAdded,temp,2));
