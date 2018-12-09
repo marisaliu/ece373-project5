@@ -255,7 +255,7 @@ char* display_book(struct player* target, int id){
   int sz = snprintf(NULL, 0, "\nPlayer %d's Book - %s ", id, target->book);
   char*	tempStr = (char *)malloc(sz+1);
 	snprintf(tempStr, sz+1, "\nPlayer %d's Book - %s",id,target->book);
-  char* str = (char *) malloc(sizeof(char)*25);
+  char* str = (char *) malloc(sizeof(char)*150);
 	strcat(str, tempStr);
 	return str;
 }
