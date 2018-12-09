@@ -71,7 +71,11 @@ while((turn == 1) && (win == 0)){
     transferCards = search(&computer, inputRank[0]); //Check player 2's hand to see if they have that rank
      /////////////If they have the rank transfer the cards///////////////////////////////////  
 	  if(transferCards == 1){          
-			strcpy(buf, "  - Player 2 has");
+		strcpy(buf, "TEST\n ");
+		rio_writen(connfd, buf, strlen(buf));
+//		rio_writen(connfd, buf, strlen(buf));
+		
+		strcpy(buf, "  - Player 2 has");
 			rio_writen(connfd, buf, strlen(buf));
 			printf("%s", buf);
 			strcpy(buf, transfer_cards(&computer, &user, inputRank[0]));
@@ -94,12 +98,16 @@ while((turn == 1) && (win == 0)){
 				win = game_over(&user);
         if(win == 1) break;
 	    }
+			strcpy(buf, "  \n");
+			rio_writen(connfd, buf, strlen(buf));
 	    strcpy(buf, "  - Player 1 gets another turn\n");
 			rio_writen(connfd, buf, strlen(buf)); 
 			printf("%s", buf);
     }
      ////////////Go Fish/////////////////////////////////////////////////////////////
-    else{                          
+    else{                     
+			strcpy(buf, " TEST2\n");
+			rio_writen(connfd, buf, strlen(buf));
 			sz = snprintf(NULL, 0, "  - Player 2 has no %c's\n", inputRank[0]);
 			tempStr = (char *)malloc(sz + 1);
       snprintf(tempStr, sz+1, "  - Player 2 has no %c's\n", inputRank[0]);
@@ -182,13 +190,13 @@ while((turn == 1) && (win == 0)){
         strcpy(buf, "  - Player 1 has");
 				rio_writen(connfd, buf, strlen(buf));
 				printf("%s", buf);
-				strcpy(buf, "  \n ");
-		  	rio_writen(connfd, buf, strlen(buf));
 
 			  strcpy(buf, transfer_cards(&user, &computer, inputRank[0]));
 				rio_writen(connfd, buf, strlen(buf));
         bookAdded = check_add_book(&computer, inputRank[0]);
-        if(bookAdded != 0){
+ 				strcpy(buf, "  \n ");
+		  	rio_writen(connfd, buf, strlen(buf));
+       if(bookAdded != 0){
           strcpy(buf, print_book_match(bookAdded,temp,2));
 					rio_writen(connfd, buf, strlen(buf));
 					printf("%s", buf);
@@ -267,7 +275,7 @@ while((turn == 1) && (win == 0)){
 
 
 ////////////////////////End of Game!/////////////////////////////////////////////
-    rio_writen(connfd, "1", 150);
+    rio_writen(connfd, "10", 10);
 		strcpy(buf, display_hand(&user));
 		rio_writen(connfd, buf, strlen(buf));
     printf("%s", buf);
