@@ -292,7 +292,7 @@ while((turn == 1) && (win == 0)){
       snprintf(tempStr, sz+1, "Player 1 Wins! %d-%d\n", strlen(user.book), strlen(computer.book));
 			strcpy(buf, tempStr);
 			free(tempStr);
-			rio_writen(connfd, buf,150);
+			rio_writen(connfd, buf, sz+1);
 			printf("%s", buf);
 		}
     else if(game_over(&computer) == 1){
@@ -301,7 +301,7 @@ while((turn == 1) && (win == 0)){
 			snprintf(tempStr, sz+1, "Player 2 Wins! %d-%d\n", strlen(computer.book), strlen(user.book));
 			strcpy(buf, tempStr);
 			free(tempStr);
-			rio_writen(connfd, buf, strlen(buf));
+			rio_writen(connfd, buf, sz+1);
 			printf("%s", buf);
 		}
     else{
