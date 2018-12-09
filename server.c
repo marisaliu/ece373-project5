@@ -137,12 +137,16 @@ while((turn == 1) && (win == 0)){
  	    if(nextCard->rank != inputRank[0]){
         strcpy(buf, "  - Player 2's turn\n");
 				rio_writen(connfd, buf, strlen(buf));
-				turn = 0;
+				  strcpy(buf, "  \n");
+				rio_writen(connfd, buf, strlen(buf));
+			turn = 0;
 			}
       else{
         strcpy(buf, "  - Player 1 gets another turn\n");             //If the card they draw is what they asked for they get another turn
-  		  rio_writen(connfd, buf,150);
-      	printf("%s", buf);
+  		  rio_writen(connfd, buf,strlen(buf));
+			  strcpy(buf, "  \n");
+				rio_writen(connfd, buf, strlen(buf));
+			printf("%s", buf);
 			} 
 	  }
   }      
@@ -173,12 +177,15 @@ while((turn == 1) && (win == 0)){
       transferCards = search(&user, inputRank[0]);          //Check player 2's hand to see if they have that rank
     ///////////////////////If they have the card - transfer cards//////////////
       if(transferCards == 1){
-	//		strcpy(buf, "   ");
-	//		rio_writen(connfd, buf, strlen(buf));
+	  		strcpy(buf, "  \n ");
+		  	rio_writen(connfd, buf, strlen(buf));
         strcpy(buf, "  - Player 1 has");
 				rio_writen(connfd, buf, strlen(buf));
 				printf("%s", buf);
-				strcpy(buf, transfer_cards(&user, &computer, inputRank[0]));
+				strcpy(buf, "  \n ");
+		  	rio_writen(connfd, buf, strlen(buf));
+
+			  strcpy(buf, transfer_cards(&user, &computer, inputRank[0]));
 				rio_writen(connfd, buf, strlen(buf));
         bookAdded = check_add_book(&computer, inputRank[0]);
         if(bookAdded != 0){
@@ -202,7 +209,10 @@ while((turn == 1) && (win == 0)){
 			}
     /////////////////////Go Fish//////////////////////////////////////////////
       else{                            //If they dont have the card exit the loop and switch to user 2's turn
-        sz = snprintf(NULL, 0, "  - Player 1 has no %c's\n", inputRank[0]);
+			strcpy(buf, "   \n");
+			rio_writen(connfd, buf, strlen(buf));
+
+			 sz = snprintf(NULL, 0, "  - Player 1 has no %c's\n", inputRank[0]);
 				tempStr = (char *)malloc(sz+1);
 				snprintf(tempStr, sz+1, "  - Player 1 has no %c's\n", inputRank[0]);
         strcpy(buf, tempStr);
@@ -247,6 +257,8 @@ while((turn == 1) && (win == 0)){
 					strcpy(buf, "  - Player 2 gets another turn\n");
 					rio_writen(connfd, buf, strlen(buf));
         	printf("%s", buf);
+					strcpy(buf, "  \n");
+					rio_writen(connfd, buf, strlen(buf));
 				}
 	    }
     }
