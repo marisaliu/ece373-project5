@@ -267,8 +267,8 @@ char* display_book(struct player* target, int id){
 //////////////////////////////////////////////////////////////////////
 char* print_book_match(char inputRank, struct hand* targetHand, int id){
   struct hand* temp = targetHand;
-  char *str;
-	char *tempstr;
+  char *str = (char *)malloc(150*sizeof(char));
+	char *tempstr = (char *)malloc(150*sizeof(char));
 	sprintf(str, "  - Player %d has", id);
   while(temp != NULL){
     if(temp->top.rank == inputRank){

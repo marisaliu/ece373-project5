@@ -83,9 +83,9 @@ int main(int argc, char **argv)
 			else if(strcmp(buf,"2") == 0){
 	//		printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 				inputRank = user_play(hand);
-				sprintf(buf, "%c", inputRank);
+				sprintf(buf, "%c%c%c", inputRank, inputRank, inputRank);
 	//			printf("input please send");
-				rio_writen(clientfd, buf,	10); //writes/sends it to server
+				rio_writen(clientfd, buf,	4); //writes/sends it to server
 //				while(rio_readlineb(&rio, buf, 150)<2);  //reads in from server
 //				Fputs(buf, stdout);
 				printf("\n");

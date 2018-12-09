@@ -64,7 +64,7 @@ while((turn == 1) && (win == 0)){
 //printf("else\n");
 		rio_writen(connfd, "2", 150);
 //	  printf("sent 2\n");
-		while(rio_readlineb(&rio, inputRank, 10)<2);
+		while(rio_readlineb(&rio, inputRank, 5)<2);
 		printf("input rank: %s\n", inputRank);
 	//	printf("num bytes: %d\n", n);
 	  temp = copy_hand_list(&user);
