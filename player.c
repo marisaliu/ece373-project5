@@ -236,14 +236,9 @@ char* display_hand(struct player* target){
 	 str[len++] = temp->top.rank;
 	 str[len++] = temp->top.suit;
 	 str[len++] = ' ';
-	//  strcat(str,temp->top.rank);
-//	  strcat(str,temp->top.suit);
-//   printf(" %c%c", temp->top.rank, temp->top.suit);
     temp = temp->next; 
   }
 	str[len] = '\0';
-//	char newstr[strlen(str)];
-//	strcpy(newstr, str);
 	return str;
 }
 

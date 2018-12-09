@@ -30,49 +30,24 @@ void gofish(int connfd)
   size_t sz;
   rio_t rio;
   rio_readinitb(&rio, connfd);
-	/*    while((n = rio_readlineb(&rio, inputRank, MAXLINE)) != 0) {
-        printf("server received %d bytes\n", n);
-        rio_writen(connfd, inputRank, n);
-    }
-*/
-/*if(initTurn==1){
-		initTurn=0;
-		strcat(buf, display_hand(&user));                          //Display player 1's hand
-		rio_writen(connfd, buf, strlen(buf)+1);
-		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
-		while((rio_readlineb(&rio, NULL, 1)) != 0);
-		strcat(buf, display_book(&user,1));                        //Display player 1's book 
-		strcat(buf, display_book(&computer,2));                    //Display user 1's book
-		rio_writen(connfd, buf, strlen(buf)+1);
-	i	memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
-		while((rio_readlineb(&rio, NULL, 1)) != 0);
-}	*/
+	
 /////////////////////Player 1's Turn///////////////////////////////////
 while((turn == 1) && (win == 0)){
-//printf("sending hand\n");
-	//	while((n=rio_readlineb(&rio, buf, 2)) != 1);
-		rio_writen(connfd, "1", 2);
+		rio_writen(connfd, "1", 10);
+		printf("1 sent\n");
 		strcpy(buf, display_hand(&user));                          //Display player 1's hand
-		rio_writen(connfd, buf, MAXLINE);
+		rio_writen(connfd, buf, 150);
 		printf("%s",buf);
 		fflush(stdout);
-//		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
-//printf("sending book 1\n");
-//		while((n=rio_readlineb(&rio, buf, 2))!=1);
 		strcpy(buf, display_book(&user,1));                        //Display player 1's book 
-		rio_writen(connfd, buf, MAXLINE);
+		rio_writen(connfd, buf, 150);
 		printf("%s", buf);
 		fflush(stdout);
-	//	memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
-//printf("sending book 2\n");
-	//	while((n=rio_readlineb(&rio, buf, 2))!=1);
 		strcpy(buf, display_book(&computer,2)); 
-		rio_writen(connfd, buf, MAXLINE);
+		rio_writen(connfd, buf, 150);
 		printf("%s\n", buf);
 		fflush(stdout);
-//		memset(buf, 0, (strlen(buf)+1)*sizeof(buf[0]));
-//printf("end\n");
-  if(user.hand_size == 0){                      //If player's hand is empty, player will draw a card and end their turn
+    if(user.hand_size == 0){                      //If player's hand is empty, player will draw a card and end their turn
 	  nextCard = next_card();
 	  //add_card(&user,nextCard);
 	  if(add_card(&user,nextCard) != 0) return -1;
@@ -81,14 +56,15 @@ while((turn == 1) && (win == 0)){
     snprintf(tempStr, sz+1, "  - Go Fish, Player 1 draws %c%c,\n", nextCard->rank, nextCard->suit);
 	  strcpy(buf, tempStr);
 		free(tempStr);
-		rio_writen(connfd, buf, MAXLINE);
+		rio_writen(connfd, buf, 150);
+		
 		printf("%s", buf);
-	//	memset(buf, 0, (strlen(buf)*sizeof(buf[0])));
   } 
 	else{
 //printf("else\n");
-		rio_writen(connfd, "2", MAXLINE);
-	  while((n = rio_readlineb(&rio, inputRank, MAXLINE))<1);
+		rio_writen(connfd, "2", 150);
+	  printf("sent 2\n");
+		while(rio_readlineb(&rio, inputRank, 10)<2);
 		printf("input rank: %s\n", inputRank);
 	//	printf("num bytes: %d\n", n);
 	  temp = copy_hand_list(&user);
@@ -96,29 +72,28 @@ while((turn == 1) && (win == 0)){
      /////////////If they have the rank transfer the cards///////////////////////////////////  
 	  if(transferCards == 1){          
 			strcpy(buf, "  - Player 2 has");
-			rio_writen(connfd, buf, MAXLINE);
+			rio_writen(connfd, buf, 150);
 			printf("%s", buf);
-	//		memset(buf, 0, (strlen(buf)*sizeof(buf[0])));
 			transfer_cards(&computer, &user, inputRank[0]);
   	  if(transfer_cards(&computer, &user, inputRank[0]) < 0) return -1;
       bookAdded = check_add_book(&user, inputRank[0]);
       if(bookAdded != 0){
 				strcpy(buf, print_book_match(bookAdded,temp,1));
-				rio_writen(connfd, buf, MAXLINE);
+				rio_writen(connfd, buf, 150);
 				printf("%s", buf);
-				sz = snprintf("  - Player 1 books %c\n", bookAdded);
+				sz = snprintf(NULL,0,"  - Player 1 books %c\n", bookAdded);
 				tempStr = (char *)malloc(sz + 1);
 				snprintf(tempStr, sz+1, "  - Player 1 books %c\n", bookAdded);
 				strcpy(buf, tempStr);
 				free(tempStr);
-				rio_writen(connfd, buf, MAXLINE);
+				rio_writen(connfd, buf,150);
 				printf("%s", buf);
 
 				win = game_over(&user);
         if(win == 1) break;
 	    }
 	    strcpy(buf, "  - Player 1 gets another turn\n");
-			rio_writen(connfd, buf, MAXLINE); 
+			rio_writen(connfd, buf, 150); 
 			printf("%s", buf);
     }
      ////////////Go Fish/////////////////////////////////////////////////////////////
@@ -128,7 +103,7 @@ while((turn == 1) && (win == 0)){
       snprintf(tempStr, sz+1, "  - Player 2 has no %c's\n", inputRank[0]);
       strcpy(buf, tempStr);
 			free(tempStr);
-			rio_writen(connfd, buf, MAXLINE);
+			rio_writen(connfd, buf, 150);
 			printf("%s", buf);
 			nextCard = next_card();                                    //Draw a card from deck
       //add_card(&user, nextCard);
@@ -138,19 +113,19 @@ while((turn == 1) && (win == 0)){
 			snprintf(tempStr, sz+1, "  - Go Fish, Player 1 draws %c%c,\n", nextCard->rank, nextCard->suit);
 			strcpy(buf, tempStr);
 			free(tempStr);
-			rio_writen(connfd, buf, MAXLINE);     
+			rio_writen(connfd, buf,150);     
       printf("%s", buf);
 			bookAdded = check_add_book(&user, nextCard->rank);         //Checks if a book is made 
       if(bookAdded != 0){
         strcpy(buf, print_book_match(bookAdded,temp,1));
-				rio_writen(connfd, buf, MAXLINE);
+				rio_writen(connfd, buf, 150);
 				printf("%s", buf);
-				sz = snprintf("  - Player 1 books %c\n", bookAdded);
+				sz = snprintf(NULL,0,"  - Player 1 books %c\n", bookAdded);
 				tempStr = (char *)malloc(sz + 1);
 				snprintf(tempStr, sz+1, "  - Player 1 books %c\n", bookAdded);
 				strcpy(buf, tempStr);
 				free(tempStr);
-				rio_writen(connfd, buf, MAXLINE);
+				rio_writen(connfd, buf, 150);
 				printf("%s", buf);
 
 
@@ -159,12 +134,12 @@ while((turn == 1) && (win == 0)){
       }
  	    if(nextCard->rank != inputRank[0]){
         strcpy(buf, "  - Player 2's turn\n");
-				rio_writen(connfd, buf, MAXLINE);
+				rio_writen(connfd, buf, 150);
 				turn = 0;
 			}
       else{
         strcpy(buf, "  - Player 1 gets another turn\n");             //If the card they draw is what they asked for they get another turn
-  		  rio_writen(connfd, buf, MAXLINE);
+  		  rio_writen(connfd, buf,150);
       	printf("%s", buf);
 			} 
 	  }
@@ -173,20 +148,20 @@ while((turn == 1) && (win == 0)){
   while((turn == 0) && (win == 0)){
 		rio_writen(connfd, "1", 3);
     strcpy(buf, display_hand(&user));                               //Display player 1's hand
-		rio_writen(connfd, buf, MAXLINE);
+		rio_writen(connfd, buf, 150);
     printf("%s", buf);
 		strcpy(buf, display_book(&user,1));                         //Display user 1's book
-		rio_writen(connfd, buf, MAXLINE);
+		rio_writen(connfd, buf, 150);
     printf("%s", buf);
 		strcpy(buf, display_book(&computer,2));                         //Display user 2's book
-    rio_writen(connfd, buf, MAXLINE);
+    rio_writen(connfd, buf, 150);
 		printf("%s", buf);
 		if(computer.hand_size == 0){
 		  nextCard = next_card();
 		  //add_card(&computer,nextCard);
 			if(add_card(&computer,nextCard) != 0) return -1;
 			strcpy(buf, "  - Go Fish, Player 2 draws a card\n");
-			rio_writen(connfd, buf, MAXLINE);
+			rio_writen(connfd, buf, 150);
 			printf("%s", buf);
 			turn = 1;
 		}
@@ -197,27 +172,27 @@ while((turn == 1) && (win == 0)){
     ///////////////////////If they have the card - transfer cards//////////////
       if(transferCards == 1){                       
         strcpy(buf, "  - Player 1 has");
-				rio_writen(connfd, buf, MAXLINE);
+				rio_writen(connfd, buf, 150);
 				printf("%s", buf);
 				transfer_cards(&user, &computer, inputRank[0]);
         bookAdded = check_add_book(&computer, inputRank[0]);
         if(bookAdded != 0){
           strcpy(buf, print_book_match(bookAdded,temp,2));
-					rio_writen(connfd, buf, MAXLINE);
+					rio_writen(connfd, buf, 150);
 					printf("%s", buf);
-					sz = snprintf("  - Player 2 books %c\n", bookAdded);
+					sz = snprintf(NULL,0,"  - Player 2 books %c\n", bookAdded);
 					tempStr = (char *)malloc(sz + 1);
 					snprintf(tempStr, sz+1, "  - Player 2 books %c\n", bookAdded);
 					strcpy(buf, tempStr);
 					free(tempStr);
-					rio_writen(connfd, buf, MAXLINE);
+					rio_writen(connfd, buf, 150);
 					printf("%s", buf);
 
 					win = game_over(&computer);
           if(win == 1) break;
 			  }  
 	      strcpy(buf, "Player 2 gets another turn\n");
-				rio_writen(connfd, buf, MAXLINE);
+				rio_writen(connfd, buf, 150);
       	printf("%s", buf);
 			}
     /////////////////////Go Fish//////////////////////////////////////////////
@@ -227,12 +202,12 @@ while((turn == 1) && (win == 0)){
 				snprintf(tempStr, sz+1, "  - Player 1 has no %c's\n", inputRank[0]);
         strcpy(buf, tempStr);
 				free(tempStr);
-				rio_writen(connfd, buf, MAXLINE);
+				rio_writen(connfd, buf, 150);
 				printf("%s", buf);
 				nextCard = next_card();  //Draw a card from deck
         if(add_card(&computer, nextCard) != 0) return -1;
         strcpy(buf, "  - Go Fish, Player 2 draws a card\n");
-				rio_writen(connfd, buf, MAXLINE);
+				rio_writen(connfd, buf, 150);
         printf("%s", buf);
 				bookAdded = check_add_book(&computer, nextCard->rank);
         if(bookAdded != 0){
@@ -241,17 +216,17 @@ while((turn == 1) && (win == 0)){
 					snprintf(tempStr, sz+1, "  - Player 2 drew %c%c\n", nextCard->rank, nextCard->suit);
 					strcpy(buf, tempStr);
 					free(tempStr);
-					rio_writen(connfd, buf, MAXLINE);
+					rio_writen(connfd, buf, 150);
 					printf("%s", buf);
           strcpy(buf, print_book_match(bookAdded,temp,2));
-					rio_writen(connfd, buf, MAXLINE);
+					rio_writen(connfd, buf, 150);
 					printf("%s", buf);
-					sz = snprintf("  - Player 2 books %c\n", bookAdded);
+					sz = snprintf(NULL,0,"  - Player 2 books %c\n", bookAdded);
 					tempStr = (char *)malloc(sz + 1);
 					snprintf(tempStr, sz+1, "  - Player 2 books %c\n", bookAdded);
 					strcpy(buf, tempStr);
 					free(tempStr);
-					rio_writen(connfd, buf, MAXLINE);
+					rio_writen(connfd, buf, 150);
 					printf("%s", buf);
  
 					win = game_over(&computer);
@@ -259,13 +234,13 @@ while((turn == 1) && (win == 0)){
         }
 				if(nextCard->rank != inputRank[0]){
 				  strcpy(buf, "  - Player 1's turn\n");
-					rio_writen(connfd, buf, MAXLINE);
+					rio_writen(connfd, buf, 150);
 					printf("%s", buf);
 					turn = 1; 
 			  }
         else{
 					strcpy(buf, "  - Player 2 gets another turn\n");
-					rio_writen(connfd, buf, MAXLINE);
+					rio_writen(connfd, buf, 150);
         	printf("%s", buf);
 				}
 	    }
@@ -275,15 +250,15 @@ while((turn == 1) && (win == 0)){
 
 
 ////////////////////////End of Game!/////////////////////////////////////////////
-    rio_writen(connfd, "1", MAXLINE);
+    rio_writen(connfd, "1", 150);
 		strcpy(buf, display_hand(&user));
-		rio_writen(connfd, buf, MAXLINE);
+		rio_writen(connfd, buf, 150);
     printf("%s", buf);
 		strcpy(buf, display_book(&user, 1));
-		rio_writen(connfd, buf, MAXLINE);
+		rio_writen(connfd, buf, 150);
     printf("%s", buf);
 		strcpy(buf, display_book(&computer,2));
-		rio_writen(connfd, buf, MAXLINE);
+		rio_writen(connfd, buf, 150);
 		printf("%s", buf);
 
     if(game_over(&user) == 1){
@@ -292,7 +267,7 @@ while((turn == 1) && (win == 0)){
       snprintf(tempStr, sz+1, "Player 1 Wins! %d-%d\n", strlen(user.book), strlen(computer.book));
 			strcpy(buf, tempStr);
 			free(tempStr);
-			rio_writen(connfd, buf, MAXLINE);
+			rio_writen(connfd, buf,150);
 			printf("%s", buf);
 		}
     else if(game_over(&computer) == 1){
@@ -301,7 +276,7 @@ while((turn == 1) && (win == 0)){
 			snprintf(tempStr, sz+1, "Player 2 Wins! %d-%d\n", strlen(computer.book), strlen(user.book));
 			strcpy(buf, tempStr);
 			free(tempStr);
-			rio_writen(connfd, buf, MAXLINE);
+			rio_writen(connfd, buf, 150);
 			printf("%s", buf);
 		}
     else{
@@ -376,16 +351,12 @@ while(play==1){                              //start game
   }
 }
 }
-
-/* Thread routine */
 void *thread(void *vargp) 
 {  
     int connfd = *((int *)vargp);
-    Pthread_detach(pthread_self()); //line:conc:echoservert:detach
-    Free(vargp);                    //line:conc:echoservert:free
-		gofish(connfd);
-    Close(connfd);
-    return NULL;
-}
-/* $end echoservertmain */
-
+		    Pthread_detach(pthread_self()); //line:conc:echoservert:detach
+				    Free(vargp);                    //line:conc:echoservert:free
+								gofish(connfd);
+								    Close(connfd);
+										    return NULL;
+												}
