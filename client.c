@@ -68,13 +68,17 @@ int main(int argc, char **argv)
 //		printf("before read\n");
 			while(rio_readlineb(&rio,buf,150)<2);
 //			printf("HELP");
-		  if(strcmp(buf,"1") == 0){
-	//			printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		  if(strcmp(buf,"10") == 0){
+			//	printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				while(rio_readlineb(&rio, buf, 150)<2);
 				strcpy(hand,buf);
+				printf("\n");
 				Fputs(hand,stdout);
 				printf("\n");
-//			printf("size of hand: %d\n",strlen(hand));
+				while(rio_readlineb(&rio, buf, 150)<2);
+				Fputs(buf, stdout);
+				printf("\n");
+		//		printf("size of hand: %d\n",strlen(hand));
 			}
 			else if(strcmp(buf,"2") == 0){
 	//		printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
@@ -84,7 +88,7 @@ int main(int argc, char **argv)
 				rio_writen(clientfd, buf,10	); //writes/sends it to server
 				while(rio_readlineb(&rio, buf, 150)<2);  //reads in from server
 				Fputs(buf, stdout);
-				printf("\n");
+	//			printf("\n");
 			}
 			else if(strcmp(buf,"3") == 0){
 			  Fgets(buf, MAXLINE, stdin); 
@@ -95,7 +99,7 @@ int main(int argc, char **argv)
 			  else{
 					Rio_readlineb(&rio, buf, 100);
 					Fputs(buf, stdout);
-					printf("\n");
+		//			printf("\n");
 				}
 			}
 			else{
@@ -105,7 +109,7 @@ int main(int argc, char **argv)
 				Fputs(buf,stdout);
 				
 //				printf("$$$$$$$$$$$$$$$$$$$$$$$");
-				printf("\n");
+		//		printf("\n");
 }			}
     }
     Close(clientfd); //line:netp:echoclient:close

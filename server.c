@@ -33,18 +33,18 @@ void gofish(int connfd)
 	
 /////////////////////Player 1's Turn///////////////////////////////////
 while((turn == 1) && (win == 0)){
-		rio_writen(connfd, "1", 10);
+		rio_writen(connfd, "10", 10);
 		printf("1 sent\n");
 		strcpy(buf, display_hand(&user));                          //Display player 1's hand
-		rio_writen(connfd, buf, strlen(buf));
+		rio_writen(connfd, buf, 150);
 		printf("%s",buf);
 		fflush(stdout);
 		strcpy(buf, display_book(&user,1));                        //Display player 1's book 
-		rio_writen(connfd, buf, strlen(buf));
+		rio_writen(connfd, buf, 150);
 		printf("%s", buf);
 		fflush(stdout);
 		strcpy(buf, display_book(&computer,2)); 
-		rio_writen(connfd, buf, strlen(buf));
+		rio_writen(connfd, buf, 150);
 		printf("%s\n", buf);
 		fflush(stdout);
     if(user.hand_size == 0){                      //If player's hand is empty, player will draw a card and end their turn
@@ -56,14 +56,14 @@ while((turn == 1) && (win == 0)){
     snprintf(tempStr, sz+1, "  - Go Fish, Player 1 draws %c%c,\n", nextCard->rank, nextCard->suit);
 	  strcpy(buf, tempStr);
 		free(tempStr);
-		rio_writen(connfd, buf, strlen(buf));
+		rio_writen(connfd, buf, 150);
 		
 		printf("%s", buf);
   } 
 	else{
 //printf("else\n");
 		rio_writen(connfd, "2", 150);
-	  printf("sent 2\n");
+//	  printf("sent 2\n");
 		while(rio_readlineb(&rio, inputRank, 10)<2);
 		printf("input rank: %s\n", inputRank);
 	//	printf("num bytes: %d\n", n);
@@ -86,7 +86,7 @@ while((turn == 1) && (win == 0)){
 				snprintf(tempStr, sz+1, "  - Player 1 books %c\n", bookAdded);
 				strcpy(buf, tempStr);
 				free(tempStr);
-				rio_writen(connfd, buf,150);
+				rio_writen(connfd, buf,strlen(buf));
 				printf("%s", buf);
 
 				win = game_over(&user);
@@ -113,7 +113,7 @@ while((turn == 1) && (win == 0)){
 			snprintf(tempStr, sz+1, "  - Go Fish, Player 1 draws %c%c,\n", nextCard->rank, nextCard->suit);
 			strcpy(buf, tempStr);
 			free(tempStr);
-			rio_writen(connfd, buf,150);     
+			rio_writen(connfd, buf,strlen(buf));     
       printf("%s", buf);
 			bookAdded = check_add_book(&user, nextCard->rank);         //Checks if a book is made 
       if(bookAdded != 0){
@@ -146,7 +146,7 @@ while((turn == 1) && (win == 0)){
   }      
 ////////////////////Player 2's turn/////////////////////////////////////////////
   while((turn == 0) && (win == 0)){
-		rio_writen(connfd, "1", 3);
+//		rio_writen(connfd, "1", 3);
     strcpy(buf, display_hand(&user));                               //Display player 1's hand
 		rio_writen(connfd, buf, strlen(buf));
     printf("%s", buf);
@@ -160,7 +160,7 @@ while((turn == 1) && (win == 0)){
 		  nextCard = next_card();
 		  //add_card(&computer,nextCard);
 			if(add_card(&computer,nextCard) != 0) return -1;
-			strcpy(buf, "  - Go Fish, Player 2 draws a card\n");
+			strcpy(buf, "  - Go Fish, Player 2 draws a card");
 			rio_writen(connfd, buf, strlen(buf));
 			printf("%s", buf);
 			turn = 1;
@@ -170,7 +170,9 @@ while((turn == 1) && (win == 0)){
       temp = copy_hand_list(&computer);
       transferCards = search(&user, inputRank[0]);          //Check player 2's hand to see if they have that rank
     ///////////////////////If they have the card - transfer cards//////////////
-      if(transferCards == 1){                       
+      if(transferCards == 1){
+	//		strcpy(buf, "   ");
+	//		rio_writen(connfd, buf, strlen(buf));
         strcpy(buf, "  - Player 1 has");
 				rio_writen(connfd, buf, strlen(buf));
 				printf("%s", buf);
