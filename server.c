@@ -200,6 +200,8 @@ while((turn == 1) && (win == 0)){
           strcpy(buf, print_book_match(bookAdded,temp,2));
 					rio_writen(connfd, buf, strlen(buf));
 					printf("%s", buf);
+					strcpy(buf, "   \n");
+					rio_writen(connfd, buf, strlen(buf));
 					sz = snprintf(NULL,0,"  - Player 2 books %c\n", bookAdded);
 					tempStr = (char *)malloc(sz + 1);
 					snprintf(tempStr, sz+1, "  - Player 2 books %c\n", bookAdded);
@@ -285,6 +287,8 @@ while((turn == 1) && (win == 0)){
 		strcpy(buf, display_book(&computer,2));
 		rio_writen(connfd, buf, strlen(buf));
 		printf("%s", buf);
+		strcpy(buf, "  \n");
+		rio_writen(connfd, buf, strlen(buf));
 
     if(game_over(&user) == 1){
 			sz = snprintf(NULL, 0, "Player 1 Wins! %d-%d\n", strlen(user.book), strlen(computer.book));
@@ -309,6 +313,8 @@ while((turn == 1) && (win == 0)){
 			rio_writen(connfd, buf, strlen(buf));
 			printf("%s", buf);
 		}
+		strcpy(buf, "   \n");
+		rio_writen(connfd, buf, strlen(buf));
     strcpy(buf,"Do you want to play again?[Y/N]\n");
 		rio_writen(connfd, buf, strlen(buf));
 		printf("%s", buf);
@@ -317,8 +323,9 @@ while((turn == 1) && (win == 0)){
 		
    // char input;
     while(playAgain == 0){
-			rio_writen(connfd, "3", 2);
-		  while((n = rio_readlineb(&rio, inputRank, MAXLINE)) < 2);
+			rio_writen(connfd, "3", 150);
+		  printf("Send 3\n");
+			while((n = rio_readlineb(&rio, inputRank, MAXLINE)) < 2);
     	printf("input: %s", inputRank); 
 		// while((getchar()) != '\n');
       if(tolower(inputRank[0]) == 'y'){
