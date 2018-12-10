@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 				printf("\n");
 				while(rio_readlineb(&rio, buf, 150)<2);
 				Fputs(buf, stdout);
-				printf("\n");d
+				printf("\n");
 			}
 			else if(strcmp(buf,"2") == 0){
 				inputRank = user_play(hand);
