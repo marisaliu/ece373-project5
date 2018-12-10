@@ -91,18 +91,20 @@ int main(int argc, char **argv)
 				printf("\n");
 			}
 			else if(strcmp(buf,"3") == 0){
-			  Fgets(buf, MAXLINE, stdin); 
+//printf("!!!!!!!!!!!!!!!!!!!!1");
+				Fgets(buf, MAXLINE, stdin); 
 				Rio_writen(clientfd, buf, strlen(buf));
-				if(strcmp(buf,"N") == 0 || strcmp(buf,"n") == 0){
+				if(strcmp(buf,"N\n") == 0 || strcmp(buf,"n\n") == 0){
 					play = 0;
+					exit(0);
 				}
-			  else{
-					Rio_readlineb(&rio, buf, 100);
-					Fputs(buf, stdout);
+//			  else{
+		//			Rio_readlineb(&rio, buf, 100);
+	//				Fputs(buf, stdout);
 		//			printf("\n");
-				}
+				
 			}
-			else{
+					else{
 	//		printf("ELLLLLLLLLLLLLLL");
 		//	printf("%s", buf);
 			 if(strlen(buf) > 1){

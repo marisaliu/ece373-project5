@@ -33,7 +33,7 @@ void gofish(int connfd)
 	
 /////////////////////Player 1's Turn///////////////////////////////////
 while((turn == 1) && (win == 0)){
-		rio_writen(connfd, "10", 10);
+	playAgain = 0;	rio_writen(connfd, "10", 10);
 		printf("1 sent\n");
 		strcpy(buf, display_hand(&user));                          //Display player 1's hand
 		rio_writen(connfd, buf, 150);
@@ -328,15 +328,28 @@ while((turn == 1) && (win == 0)){
 			while((n = rio_readlineb(&rio, inputRank, MAXLINE)) < 2);
     	printf("input: %s", inputRank); 
 		// while((getchar()) != '\n');
-      if(tolower(inputRank[0]) == 'y'){
-        if(reset_player(&user) != 0) return -1;
-				if(reset_player(&computer) != 0) return -1;
-				playAgain = 1;
+  if(strcmp(inputRank, "y") ==0)printf("It works!");
+	else if(tolower(inputRank[0]) == 'y'){
+			printf("Okjfwoie");
+      //  if(reset_player(&user) != 0) return -1;
+		//		if(reset_player(&computer) != 0) return -1;
+		//		playAgain = 1;
 				win = 0;
-        break;
+ 
+//		if(shuffle() != 0) return -1;                                  //shuffle cards
+  //  if(deal_player_cards(&user) != 0) return -1;   //deal cards
+    //if(deal_player_cards(&computer) != 0) return -1;
+   // user.hand_size = 7;
+   // computer.hand_size = 7;
+ printf("playagain");
+ break;
       }
       else if(tolower(inputRank[0]) == 'n'){
-        play = 0;
+//		printf("send 4");
+	//	strcpy(buf, "   \n");
+//		rio_writen(connfd, buf, strlen(buf));
+//rio_writen(connfd, "40", 10);
+	//		play = 0;
         exit(0);
       }
       else {
@@ -365,7 +378,7 @@ int main(int argc, char **argv)
 	 computer.book[0] = '\0';
 	
 while(play==1){                              //start game
-    playAgain = 0;
+   playAgain = 0;
     initTurn = 1;
 		if(shuffle() != 0) return -1;                                  //shuffle cards
     if(deal_player_cards(&user) != 0) return -1;   //deal cards
@@ -373,13 +386,14 @@ while(play==1){                              //start game
     user.hand_size = 7;
     computer.hand_size = 7;
 ///////////////////////Loops Through Players////////////////////////////////   
-    while(win == 0){
+   while(win == 0){
     while (1) {
       clientlen=sizeof(struct sockaddr_storage);
 			connfdp = Malloc(sizeof(int)); //line:conc:echoservert:beginmalloc
 			*connfdp = Accept(listenfd, (SA *) &clientaddr, &clientlen); //line:conc:echoservert:endmalloc
 			Pthread_create(&tid, NULL, thread, connfdp);
     }
+//     if(playAgain == 0) break;
   }
 }
 }
