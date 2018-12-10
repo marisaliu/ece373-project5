@@ -268,34 +268,22 @@ while((turn == 1) && (win == 0)){
    // char input;
     while(playAgain == 0){
 			rio_writen(connfd, "3", 150);
-		  printf("Send 3\n");
 			while((n = rio_readlineb(&rio, inputRank, 4)) < 2);
-    	printf("input: %s", inputRank);
-			printf("input[0]: %c", inputRank[0]); 
-		int yes = 0;
-  if(strcmp(inputRank, "y\n") ==0) yes = 1;
-	printf("yes? %d\n", yes);
-	if(yes == 1){
-			printf("Okjfwoie");
-      //  if(reset_player(&user) != 0) return -1;
-		//		if(reset_player(&computer) != 0) return -1;
-		//		playAgain = 1;
-				win = 0;
+  if(strcmp(inputRank, "y\n") ==0){
+  if(reset_player(&user) != 0) return -1;
+		if(reset_player(&computer) != 0) return -1;
+		playAgain = 1;
+		win = 0;
  
-//		if(shuffle() != 0) return -1;                                  //shuffle cards
-  //  if(deal_player_cards(&user) != 0) return -1;   //deal cards
-    //if(deal_player_cards(&computer) != 0) return -1;
-   // user.hand_size = 7;
-   // computer.hand_size = 7;
- printf("playagain");
- break;
+		if(shuffle() != 0) return -1;                                  //shuffle card
+		 if(deal_player_cards(&user) != 0) return -1;   //deal cards
+  if(deal_player_cards(&computer) != 0) return -1;
+    user.hand_size = 7;
+	 computer.hand_size = 7;
+	 break;
       }
       else if(tolower(inputRank[0]) == 'n'){
-//		printf("send 4");
-	//	strcpy(buf, "   \n");
-//		rio_writen(connfd, buf, strlen(buf));
-//rio_writen(connfd, "40", 10);
-	//		play = 0;
+
         exit(0);
       }
       else {
