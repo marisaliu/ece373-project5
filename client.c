@@ -65,11 +65,8 @@ int main(int argc, char **argv)
 //while play is true prompt the user for a rank and then display his hand and the books
     while (play) 
 		{
-//		printf("before read\n");
 			while(rio_readlineb(&rio,buf,150)<2);
-//			printf("HELP");
 		  if(strcmp(buf,"10") == 0){
-			//	printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				while(rio_readlineb(&rio, buf, 150)<2);
 				strcpy(hand,buf);
 				printf("\n");
@@ -77,42 +74,27 @@ int main(int argc, char **argv)
 				printf("\n");
 				while(rio_readlineb(&rio, buf, 150)<2);
 				Fputs(buf, stdout);
-				printf("\n");
-		//		printf("size of hand: %d\n",strlen(hand));
+				printf("\n");d
 			}
 			else if(strcmp(buf,"2") == 0){
-	//		printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 				inputRank = user_play(hand);
 				sprintf(buf, "%c%c%c", inputRank, inputRank, inputRank);
-	//			printf("input please send");
 				rio_writen(clientfd, buf,	4); //writes/sends it to server
-//				while(rio_readlineb(&rio, buf, 150)<2);  //reads in from server
-//				Fputs(buf, stdout);
 				printf("\n");
 			}
 			else if(strcmp(buf,"3") == 0){
-//printf("!!!!!!!!!!!!!!!!!!!!1");
 				Fgets(buf, MAXLINE, stdin); 
 				Rio_writen(clientfd, buf, strlen(buf));
 				if(strcmp(buf,"N\n") == 0 || strcmp(buf,"n\n") == 0){
 					play = 0;
 					exit(0);
 				}
-//			  else{
-		//			Rio_readlineb(&rio, buf, 100);
-	//				Fputs(buf, stdout);
-		//			printf("\n");
-				
 			}
-					else{
-	//		printf("ELLLLLLLLLLLLLLL");
-		//	printf("%s", buf);
+		 else{
 			 if(strlen(buf) > 1){
-				Fputs(buf,stdout);
-				
-//				printf("$$$$$$$$$$$$$$$$$$$$$$$");
-		//		printf("\n");
-}			}
+					Fputs(buf,stdout);
+			 }	
+		}
     }
     Close(clientfd); //line:netp:echoclient:close
     exit(0);
